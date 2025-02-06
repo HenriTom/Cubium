@@ -23,6 +23,11 @@ repositories {
 			includeGroup "maven.modrinth"
 		}
 	}
+
+	maven {
+		name = "Terraformers"
+		url = "https://maven.terraformersmc.com/"
+	}
 }
 
 loom {
@@ -48,7 +53,10 @@ dependencies {
 	modImplementation "net.fabricmc:fabric-language-kotlin:${project.fabric_kotlin_version}"
 
 	// MCEF
-	modImplementation "maven.modrinth:mcef:2.1.6-1.21.4"
+	modImplementation "maven.modrinth:mcef:${project.mcef_version}"
+
+	// ModMenu (https://github.com/TerraformersMC/ModMenu)
+	modImplementation("com.terraformersmc:modmenu:${project.modmenu_version}")
 }
 
 processResources {

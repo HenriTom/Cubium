@@ -1,0 +1,61 @@
+{
+	"schemaVersion": 1,
+	"id": "cubium",
+	"version": "1.0.0",
+	"name": "Cubium",
+	"description": "A client-side Minecraft mod that integrates a Chromium-based browser directly into the game, allowing you to access websites without tabbing out.",
+	"authors": [
+		"HenriTom"
+	],
+	"contact": {
+		"homepage": "https://modrinth.com/mod/cubium",
+		"issues": "https://github.com/HenriTom/Cubium/issues",
+		"sources": "https://github.com/HenriTom/Cubium",
+		"wiki": "https://github.com/HenriTom/Cubium/wiki",
+		"discord": "https://discord.gg/XdHBJKTvxJ"
+	},
+	"license": "LGPL-3.0-or-later",
+	"icon": "assets/cubium/icon.png",
+	"environment": "client",
+	"entrypoints": {
+		"client": [
+			{
+				"value": "me.henritom.cubium.CubiumClient",
+				"adapter": "kotlin"
+			}
+		]
+	},
+	"mixins": [
+		{
+			"config": "cubium.client.mixins.json",
+			"environment": "client"
+		}
+	],
+	"depends": {
+		"fabricloader": ">=0.16.10",
+		"minecraft": "~1.21.4",
+		"java": ">=21",
+		"fabric-api": "*",
+		"fabric-language-kotlin": "*"
+	},
+	"suggests": {
+		"another-mod": "*"
+	},
+	"language": {
+		"translation": [
+			"en_us",
+			"de_de"
+		]
+	},
+	"custom": {
+		"modmenu": {
+			"links": {
+				"modmenu.modrinth": "https://modrinth.com/mod/cubium",
+				"modmenu.issues": "https://github.com/HenriTom/Cubium/issues",
+				"modmenu.wiki": "https://github.com/HenriTom/Cubium/wiki",
+				"modmenu.discord": "https://discord.gg/w5aWc2tgFY"
+			},
+			"update_checker": true
+		}
+	}
+}
