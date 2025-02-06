@@ -1,8 +1,8 @@
-package me.henritom.browser
+package me.henritom.cubium
 
 import net.fabricmc.api.ClientModInitializer
 
-object BrowserClient : ClientModInitializer {
+object CubiumClient : ClientModInitializer {
 	override fun onInitializeClient() {
 
 	}
