@@ -2,6 +2,7 @@ plugins {
 	id 'fabric-loom' version '1.9-SNAPSHOT'
 	id 'maven-publish'
 	id "org.jetbrains.kotlin.jvm" version "2.1.10"
+	id "org.jetbrains.kotlin.plugin.serialization" version "2.1.10"
 }
 
 version = project.mod_version
@@ -48,15 +49,18 @@ dependencies {
 	mappings "net.fabricmc:yarn:${project.yarn_mappings}:v2"
 	modImplementation "net.fabricmc:fabric-loader:${project.loader_version}"
 
-	// Fabric API. This is technically optional, but you probably want it anyway.
+	// Fabric API
 	modImplementation "net.fabricmc.fabric-api:fabric-api:${project.fabric_version}"
 	modImplementation "net.fabricmc:fabric-language-kotlin:${project.fabric_kotlin_version}"
 
-	// MCEF
+	// Kotlin Serialization
+	implementation("org.jetbrains.kotlinx:kotlinx-serialization-json:1.5.1")
+
+	// MCEF (https://modrinth.com/mod/mcef)
 	modImplementation "maven.modrinth:mcef:${project.mcef_version}"
 
 	// ModMenu (https://github.com/TerraformersMC/ModMenu)
-	modImplementation("com.terraformersmc:modmenu:${project.modmenu_version}")
+	// modImplementation("com.terraformersmc:modmenu:${project.modmenu_version}")
 }
 
 processResources {

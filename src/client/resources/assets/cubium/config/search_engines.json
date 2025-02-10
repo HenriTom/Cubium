@@ -1,0 +1,56 @@
+[
+  {
+    "title": "cubium.default_se.google.title",
+    "description": "cubium.default_se.google.description",
+    "url": "cubium.default_se.google.url",
+    "searchUrl": "cubium.default_se.google.searchUrl"
+  },
+  {
+    "title": "cubium.default_se.bing.title",
+    "description": "cubium.default_se.bing.description",
+    "url": "cubium.default_se.bing.url",
+    "searchUrl": "cubium.default_se.bing.searchUrl"
+  },
+  {
+    "title": "cubium.default_se.duckduckgo.title",
+    "description": "cubium.default_se.duckduckgo.description",
+    "url": "cubium.default_se.duckduckgo.url",
+    "searchUrl": "cubium.default_se.duckduckgo.searchUrl"
+  },
+  {
+    "title": "cubium.default_se.ecosia.title",
+    "description": "cubium.default_se.ecosia.description",
+    "url": "cubium.default_se.ecosia.url",
+    "searchUrl": "cubium.default_se.ecosia.searchUrl"
+  },
+  {
+    "title": "cubium.default_se.yahoo.title",
+    "description": "cubium.default_se.yahoo.description",
+    "url": "cubium.default_se.yahoo.url",
+    "searchUrl": "cubium.default_se.yahoo.searchUrl"
+  },
+  {
+    "title": "cubium.default_se.startpage.title",
+    "description": "cubium.default_se.startpage.description",
+    "url": "cubium.default_se.startpage.url",
+    "searchUrl": "cubium.default_se.startpage.searchUrl"
+  },
+  {
+    "title": "cubium.default_se.yandex.title",
+    "description": "cubium.default_se.yandex.description",
+    "url": "cubium.default_se.yandex.url",
+    "searchUrl": "cubium.default_se.yandex.searchUrl"
+  },
+  {
+    "title": "cubium.default_se.baidu.title",
+    "description": "cubium.default_se.baidu.description",
+    "url": "cubium.default_se.baidu.url",
+    "searchUrl": "cubium.default_se.baidu.searchUrl"
+  },
+  {
+    "title": "cubium.default_se.brave.title",
+    "description": "cubium.default_se.brave.description",
+    "url": "cubium.default_se.brave.url",
+    "searchUrl": "cubium.default_se.brave.searchUrl"
+  }
+]

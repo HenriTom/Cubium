@@ -1,4 +1,56 @@
 {
   "cubium.options.category": "Cubium",
-  "cubium.options.open_browser": "Open Browser"
+  "cubium.options.open_browser": "Open Browser",
+
+  "cubium.ui.select_se.title": "Select Search Engine",
+
+  "cubium.ui.browser.title": "Browser",
+  "cubium.ui.browser.reload": "⟳",
+  "cubium.ui.browser.home": "⌂",
+  "cubium.ui.browser.close": "✕",
+
+  "cubium.default_se.google.title": "Google",
+  "cubium.default_se.google.description": "The world's leading search engine, offering comprehensive search results.",
+  "cubium.default_se.google.url": "https://www.google.com/",
+  "cubium.default_se.google.searchUrl": "https://www.google.com/search?q=",
+
+  "cubium.default_se.bing.title": "Bing",
+  "cubium.default_se.bing.description": "Microsoft's search engine with an engaging image search, and solid search results.",
+  "cubium.default_se.bing.url": "https://www.bing.com/",
+  "cubium.default_se.bing.searchUrl": "https://www.bing.com/search?q=",
+
+  "cubium.default_se.duckduckgo.title": "DuckDuckGo",
+  "cubium.default_se.duckduckgo.description": "A privacy-focused search engine that does not track or store user data.",
+  "cubium.default_se.duckduckgo.url": "https://duckduckgo.com/",
+  "cubium.default_se.duckduckgo.searchUrl": "https://duckduckgo.com/?q=",
+
+  "cubium.default_se.ecosia.title": "Ecosia",
+  "cubium.default_se.ecosia.description": "An eco-friendly search engine that uses ad revenue to plant trees.",
+  "cubium.default_se.ecosia.url": "https://www.ecosia.org/",
+  "cubium.default_se.ecosia.searchUrl": "https://www.ecosia.org/search?q=",
+
+  "cubium.default_se.yahoo.title": "Yahoo!",
+  "cubium.default_se.yahoo.description": "One of the oldest search engines, powered by Bing and integrated with a news portal.",
+  "cubium.default_se.yahoo.url": "https://search.yahoo.com/",
+  "cubium.default_se.yahoo.searchUrl": "https://search.yahoo.com/search?p=",
+
+  "cubium.default_se.startpage.title": "Startpage",
+  "cubium.default_se.startpage.description": "A privacy-centric search engine that delivers Google results without tracking users.",
+  "cubium.default_se.startpage.url": "https://www.startpage.com/",
+  "cubium.default_se.startpage.searchUrl": "https://www.startpage.com/do/search?q=",
+
+  "cubium.default_se.yandex.title": "Yandex",
+  "cubium.default_se.yandex.description": "Russia’s largest search engine, offering its own suite of services like maps.",
+  "cubium.default_se.yandex.url": "https://www.yandex.com/",
+  "cubium.default_se.yandex.searchUrl": "https://yandex.com/search/?text=",
+
+  "cubium.default_se.baidu.title": "Baidu",
+  "cubium.default_se.baidu.description": "The leading search engine in China, optimized for Chinese-language content.",
+  "cubium.default_se.baidu.url": "https://www.baidu.com/",
+  "cubium.default_se.baidu.searchUrl": "https://www.baidu.com/s?wd=",
+
+  "cubium.default_se.brave.title": "Brave",
+  "cubium.default_se.brave.description": "A private search engine that operates without relying on third-party indexes.",
+  "cubium.default_se.brave.url": "https://search.brave.com/",
+  "cubium.default_se.brave.searchUrl": "https://search.brave.com/search?q="
 }
