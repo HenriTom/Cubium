@@ -2,6 +2,7 @@ package me.henritom.cubium
 
 import me.henritom.cubium.commands.CubiumCommand
 import me.henritom.cubium.config.ConfigManager
+import me.henritom.cubium.features.bookmark.BookmarkManager
 import me.henritom.cubium.features.history.HistoryManager
 import me.henritom.cubium.features.uas.UserAgentManager
 import me.henritom.cubium.keybinds.KeyBindManager
@@ -18,6 +19,7 @@ object CubiumClient : ClientModInitializer {
 	val searchEngineManager = SearchEngineManager()
 	val userAgentManager = UserAgentManager()
 	val historyManager = HistoryManager()
+	val bookmarkManager = BookmarkManager()
 
 	override fun onInitializeClient() {
 		keyBindManager.registerKeyBinds()

@@ -5,9 +5,20 @@
   "cubium.ui.select_se.title": "Select Search Engine",
 
   "cubium.ui.browser.title": "Browser",
+
+  "cubium.ui.browser.previous": "<",
   "cubium.ui.browser.reload": "⟳",
   "cubium.ui.browser.home": "⌂",
+  "cubium.ui.browser.bookmark": "☆",
+  "cubium.ui.browser.bookmarked": "★",
+  "cubium.ui.browser.fullscreen": "⛶",
   "cubium.ui.browser.close": "✕",
+
+  "cubium.commands.info.version": "§8» §7Cubium v%s",
+  "cubium.commands.info.wiki": "§8» §7Cubium Wiki: §fhttps://github.com/HenriTom/Cubium/wiki",
+  "cubium.commands.info.discord": "§8» §7Cubium Discord: §fhttps://discord.gg/XdHBJKTvxJ",
+  "cubium.commands.info.modrinth": "§8» §7Cubium Modrinth: §fhttps://modrinth.com/mod/cubium",
+  "cubium.commands.info.feedback": "§8» §7Report Issues or Suggest features on §fhttps://github.com/HenriTom/Cubium/issues/new/choose",
 
   "cubium.default_se.google.title": "Google",
   "cubium.default_se.google.description": "The world's leading search engine, offering comprehensive search results.",

@@ -1,4 +1,4 @@
-package me.henritom.cubium.commands.resetdefaultse
+package me.henritom.cubium.commands.impl.resetdefaultse
 
 import com.mojang.brigadier.Command
 import com.mojang.brigadier.builder.LiteralArgumentBuilder
@@ -11,8 +11,8 @@ class ResetDefaultSE {
     fun register(): LiteralArgumentBuilder<FabricClientCommandSource>? {
         return ClientCommandManager.literal("reset_default_se")
             .executes {
-                if (CubiumClient.historyManager.lastUrl == Text.translatable(CubiumClient.searchEngineManager.defaultSearchEngine?.url).string)
-                    CubiumClient.historyManager.lastUrl = ""
+                if (CubiumClient.historyManager.history.isNotEmpty() && CubiumClient.historyManager.history.last() == Text.translatable(CubiumClient.searchEngineManager.defaultSearchEngine?.url).string)
+                    CubiumClient.historyManager.history[CubiumClient.historyManager.history.size - 1] = ""
 
                 CubiumClient.searchEngineManager.defaultSearchEngine = null
 
