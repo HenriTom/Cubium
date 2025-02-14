@@ -14,6 +14,17 @@ import net.minecraft.client.gui.widget.ButtonWidget
 import net.minecraft.client.gui.widget.TextFieldWidget
 import net.minecraft.client.render.*
 import net.minecraft.text.Text
+import org.cef.CefApp
+import org.cef.callback.CefCallback
+import org.cef.handler.CefResourceHandler
+import org.cef.misc.IntRef
+import org.cef.misc.StringRef
+import org.cef.network.CefRequest
+import org.cef.network.CefResponse
+import java.nio.charset.StandardCharsets
+import java.util.*
+import kotlin.math.min
+
 
 class BrowserScreen(val parent: Screen?) : Screen(Text.translatable("cubium.ui.browser.title")) {
 
@@ -58,6 +69,8 @@ class BrowserScreen(val parent: Screen?) : Screen(Text.translatable("cubium.ui.b
 
             resizeBrowser()
         }
+
+        initSchemeHandler()
     }
 
     override fun render(context: DrawContext?, mouseX: Int, mouseY: Int, delta: Float) {
@@ -363,7 +376,7 @@ class BrowserScreen(val parent: Screen?) : Screen(Text.translatable("cubium.ui.b
                 val specialSchemes = listOf("chrome://", "cubium://", "about:", "file:", "http://", "https://")
 
                 url = when {
-                    specialSchemes.any { url.startsWith(it) } -> url.replace("cubium://", "chrome://")
+                    specialSchemes.any { url.startsWith(it) } -> url.replace("cubium-urls", "chrome-urls")
                     domainRegex.matches(url) -> if (!url.startsWith("http://") && !url.startsWith("https://")) "https://$url" else url
                     else -> "${Text.translatable(CubiumClient.searchEngineManager.defaultSearchEngine?.searchUrl).string ?: ""}${url.replace(" ", "+")}"
                 }
@@ -398,5 +411,114 @@ class BrowserScreen(val parent: Screen?) : Screen(Text.translatable("cubium.ui.b
         }
 
         return super.charTyped(codePoint, modifiers)
+    }
+
+    private fun initSchemeHandler() {
+        CefApp.getInstance().registerSchemeHandlerFactory("cubium", "") { _, _, _, request ->
+            var url = request.url.lowercase(Locale.getDefault())
+
+            val cubiumURLs = listOf(
+                "cubium://bookmarks",
+                "cubium://history",
+                "cubium://settings"
+            )
+
+            if (url == "cubium://clear_history") {
+                CubiumClient.historyManager.history.clear()
+                url = "cubium://history"
+            }
+
+            if (cubiumURLs.contains(url)) {
+                val customPage = when (url) {
+                    "cubium://bookmarks" -> {
+                        val bookmarks = CubiumClient.bookmarkManager.bookmarks
+                        val folders = mutableMapOf<String, MutableList<Pair<String, String>>>()
+
+                        for (bookmark in bookmarks) {
+                            val folder = bookmark.folder
+                            folders.computeIfAbsent(folder) { mutableListOf() }.add(Pair(bookmark.name, bookmark.url))
+                        }
+
+                        buildString {
+                            append("<html><body><h1>Cubium Bookmarks</h1>")
+
+                            for ((folder, bookmarksInFolder) in folders) {
+                                append("<h2>$folder</h2><ul>")
+
+                                for ((title, bUrl) in bookmarksInFolder)
+                                    append("""<li><a href="javascript:void(0);" onclick="window.location.href='$bUrl';">$title</a></li>""")
+
+                                append("</ul>")
+                            }
+
+                            append("</body></html>")
+                        }
+                    }
+
+                    "cubium://history" -> {
+                        val history = CubiumClient.historyManager.history
+
+                        buildString {
+                            append("<html><body><h1>Cubium History</h1>")
+                            append("<button onclick=\"clearHistory()\">Clear History</button>")
+
+                            append("<ul>")
+                            for (hUrl in history) {
+                                append("""<li><a href="javascript:void(0);" onclick="window.location.href='$hUrl';">$hUrl</a></li>""")
+                            }
+                            append("</ul>")
+
+                            append("""
+                                <script>
+                                function clearHistory() {
+                                    window.location.href = 'cubium://clear_history';
+                                }
+                                </script>""")
+
+                            append("</body></html>")
+                        }
+                    }
+
+                    else -> "<html><body><h1>Unknown Cubium Page</h1><p>No content for this URL.</p></body></html>"
+                }
+
+                val stream = customPage.byteInputStream(StandardCharsets.UTF_8)
+                val size = customPage.length
+
+                return@registerSchemeHandlerFactory object : CefResourceHandler {
+                    override fun processRequest(request: CefRequest, callback: CefCallback): Boolean {
+                        callback.Continue()
+                        return true
+                    }
+
+                    override fun getResponseHeaders(response: CefResponse, responseLength: IntRef, redirectUrl: StringRef) {
+                        response.mimeType = "text/html"
+                        response.status = 200
+                        responseLength.set(size)
+                    }
+
+                    override fun readResponse(dataOut: ByteArray, bytesToRead: Int, bytesRead: IntRef, callback: CefCallback): Boolean {
+                        try {
+                            val available = stream.available()
+
+                            if (available > 0) {
+                                val toRead = min(available.toDouble(), bytesToRead.toDouble()).toInt()
+                                bytesRead.set(stream.read(dataOut, 0, toRead))
+                                return true
+                            }
+                        } catch (e: Exception) {
+                            e.printStackTrace()
+                        }
+                        return false
+                    }
+
+                    override fun cancel() {}
+                }
+            } else {
+                browser?.loadURL(url.replace("cubium://", "chrome://"))
+
+                return@registerSchemeHandlerFactory null
+            }
+        }
     }
 }
