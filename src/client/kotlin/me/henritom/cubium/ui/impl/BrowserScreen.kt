@@ -359,12 +359,13 @@ class BrowserScreen(val parent: Screen?) : Screen(Text.translatable("cubium.ui.b
 
                 var url = addressBar!!.text
 
-                if (url.contains(".") && !url.contains(" ")) {
-                    if (!url.startsWith("http://") && !url.startsWith("https://"))
-                        url = "https://$url"
-                } else {
-                    url.replace(" ", "+")
-                    url = "${Text.translatable(CubiumClient.searchEngineManager.defaultSearchEngine?.searchUrl).string ?: ""}$url"
+                val domainRegex = Regex("^(https?://)?([a-zA-Z0-9.-]+\\.[a-zA-Z]{2,})$")
+                val specialSchemes = listOf("chrome://", "cubium://", "about:", "file:", "http://", "https://")
+
+                url = when {
+                    specialSchemes.any { url.startsWith(it) } -> url.replace("cubium://", "chrome://")
+                    domainRegex.matches(url) -> if (!url.startsWith("http://") && !url.startsWith("https://")) "https://$url" else url
+                    else -> "${Text.translatable(CubiumClient.searchEngineManager.defaultSearchEngine?.searchUrl).string ?: ""}${url.replace(" ", "+")}"
                 }
 
                 browser?.loadURL(url)
