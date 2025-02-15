@@ -22,6 +22,7 @@ import org.cef.misc.StringRef
 import org.cef.network.CefRequest
 import org.cef.network.CefResponse
 import java.nio.charset.StandardCharsets
+import java.text.SimpleDateFormat
 import java.util.*
 import kotlin.math.min
 
@@ -31,16 +32,18 @@ class BrowserScreen(val parent: Screen?) : Screen(Text.translatable("cubium.ui.b
     private var defaultBrowserOffset = 40f
     private var browserOffset = defaultBrowserOffset
     private var browser: MCEFBrowser? = null
+    private var menuOpened = false
 
     private var lastButton: ButtonWidget? = null
     private var reloadButton: ButtonWidget? = null
     private var homeButton: ButtonWidget? = null
     private var bookmarkButton: ButtonWidget? = null
-    private var fullscreenButton: ButtonWidget? = null
 
     private var addressBar: TextFieldWidget? = null
     private var addressBarWasSelected = false
 
+    private var menuButton: ButtonWidget? = null
+    private var fullscreenButton: ButtonWidget? = null
     private var closeButton: ButtonWidget? = null
 
     override fun init() {
@@ -54,6 +57,7 @@ class BrowserScreen(val parent: Screen?) : Screen(Text.translatable("cubium.ui.b
 
             addressBar = null
 
+            menuButton = null
             fullscreenButton = null
             closeButton = null
         }
@@ -65,7 +69,7 @@ class BrowserScreen(val parent: Screen?) : Screen(Text.translatable("cubium.ui.b
 
         if (browser == null) {
             val defaultUrl = Text.translatable(CubiumClient.searchEngineManager.defaultSearchEngine!!.url).string
-            browser = MCEF.createBrowser(CubiumClient.historyManager.history.lastOrNull()?.ifEmpty { defaultUrl } ?: defaultUrl, false)
+            browser = MCEF.createBrowser(CubiumClient.historyManager.history.lastOrNull()?.url?.ifEmpty { defaultUrl } ?: defaultUrl, false)
 
             resizeBrowser()
         }
@@ -148,7 +152,7 @@ class BrowserScreen(val parent: Screen?) : Screen(Text.translatable("cubium.ui.b
         if (bookmarkButton == null) {
             bookmarkButton = ButtonWidget.builder(if (isBookmarked) Text.translatable("cubium.ui.browser.bookmarked") else Text.translatable("cubium.ui.browser.bookmark")) {
                 if (!CubiumClient.bookmarkManager.bookmarks.removeIf { it.url == browser?.getURL() })
-                    CubiumClient.bookmarkManager.bookmarks.add(Bookmark(browser?.getURL().toString(), browser?.getURL().toString(), "Bookmarks"))
+                    CubiumClient.bookmarkManager.bookmarks.add(Bookmark(CubiumClient.bookmarkManager.getNextAvailableId(), browser?.getURL().toString(), browser?.getURL().toString(), "Bookmarks"))
 
                 return@builder
             }
@@ -170,7 +174,7 @@ class BrowserScreen(val parent: Screen?) : Screen(Text.translatable("cubium.ui.b
                 textRenderer,
                 (defaultBrowserOffset + 80).toInt(),
                 (defaultBrowserOffset - 20).toInt(),
-                (width - 120 - defaultBrowserOffset * 2).toInt(),
+                (width - 140 - defaultBrowserOffset * 2).toInt(),
                 20,
                 Text.translatable("cubium.ui.browser.title")
             )
@@ -188,6 +192,24 @@ class BrowserScreen(val parent: Screen?) : Screen(Text.translatable("cubium.ui.b
 
             addressBar!!.setSelectionStart(0)
             addressBar!!.setSelectionEnd(addressBar!!.text.length)
+        }
+
+        // Menu Button
+        if (menuButton == null) {
+            menuButton = ButtonWidget.builder(Text.translatable("cubium.ui.browser.menu")) {
+                menuOpened = !menuOpened
+
+                return@builder
+            }
+                .dimensions((width - defaultBrowserOffset - 60).toInt(), 20, 20, 20)
+                .build()
+
+            addDrawableChild(menuButton)
+        }
+
+        if (MinecraftClient.getInstance().currentScreen?.focused == menuButton) {
+            MinecraftClient.getInstance().currentScreen?.focused = null
+            menuButton!!.isFocused = false
         }
 
         // FullScreen Button
@@ -227,7 +249,7 @@ class BrowserScreen(val parent: Screen?) : Screen(Text.translatable("cubium.ui.b
         }
 
         // History Saver
-        if (CubiumClient.historyManager.history.lastOrNull() != browser?.getURL())
+        if (CubiumClient.historyManager.history.lastOrNull()?.url != browser?.getURL())
             CubiumClient.historyManager.add(browser?.getURL().toString())
 
         // Browser
@@ -248,10 +270,15 @@ class BrowserScreen(val parent: Screen?) : Screen(Text.translatable("cubium.ui.b
         BufferRenderer.drawWithGlobalProgram(buffer.end())
         RenderSystem.setShaderTexture(0, 0)
         RenderSystem.enableDepthTest()
+
+        // Menu Overlay
+        if (menuOpened)
+            renderMenuOverlay(context, mouseX, mouseY)
     }
 
     private fun enterFullscreen() {
         browserOffset = 0f
+        menuOpened = false
 
         buttonVisibility(false)
         resizeBrowser()
@@ -280,6 +307,9 @@ class BrowserScreen(val parent: Screen?) : Screen(Text.translatable("cubium.ui.b
 
         addressBar?.active = visible
         addressBar?.visible = visible
+
+        menuButton?.active = visible
+        menuButton?.visible = visible
 
         fullscreenButton?.active = visible
         fullscreenButton?.visible = visible
@@ -332,6 +362,34 @@ class BrowserScreen(val parent: Screen?) : Screen(Text.translatable("cubium.ui.b
     }
 
     override fun mouseClicked(mouseX: Double, mouseY: Double, button: Int): Boolean {
+        if (menuOpened) {
+            val buttons = mapOf(
+                Pair("Bookmarks", "cubium://bookmarks"),
+                Pair("History", "cubium://history"),
+                Pair("Settings", "cubium://settings")
+            )
+
+            val menuWidth = buttons.keys.maxOf { textRenderer.getWidth(it) } + 20
+
+            val menuX = (width - browserOffset - menuWidth).toInt()
+            val menuY = browserOffset.toInt()
+
+            val buttonHeight = textRenderer.fontHeight + 10
+            val buttonWidth = menuWidth - 10
+
+            val buttonX = menuX + 5
+            var buttonY = menuY + 5
+
+            for (url in buttons.values) {
+                if (mouseX >= buttonX && mouseX <= buttonX + buttonWidth && mouseY >= buttonY && mouseY <= buttonY + buttonHeight)
+                    browser?.loadURL(url)
+
+                buttonY += buttonHeight + 5
+            }
+
+            return super.mouseClicked(mouseX, mouseY, button)
+        }
+
         if (addressBar == null || !addressBar!!.isFocused) {
             browser!!.sendMousePress(mouseX(mouseX), mouseY(mouseY), button)
             browser!!.setFocus(true)
@@ -413,6 +471,35 @@ class BrowserScreen(val parent: Screen?) : Screen(Text.translatable("cubium.ui.b
         return super.charTyped(codePoint, modifiers)
     }
 
+    private fun renderMenuOverlay(context: DrawContext, mouseX: Int, mouseY: Int) {
+        val buttons = listOf(
+            "Bookmarks",
+            "History",
+            "Settings"
+        )
+
+        val menuWidth = buttons.maxOf { textRenderer.getWidth(it) } + 20
+        val menuHeight = buttons.size * (textRenderer.fontHeight + 10) + 20
+
+        val menuX = (width - browserOffset - menuWidth).toInt()
+        val menuY = browserOffset.toInt()
+
+        context.fill(menuX, menuY, menuX + menuWidth, menuY + menuHeight, UIColors.BACKGROUND.rgb)
+
+        val buttonHeight = textRenderer.fontHeight + 10
+        val buttonWidth = menuWidth - 10
+
+        val buttonX = menuX + 5
+        var buttonY = menuY + 5
+
+        for (button in buttons) {
+            context.fill(buttonX, buttonY, buttonX + buttonWidth, buttonY + buttonHeight, if (mouseX >= buttonX && mouseX <= buttonX + buttonWidth && mouseY >= buttonY && mouseY <= buttonY + buttonHeight) UIColors.BACKGROUND2.rgb else UIColors.BACKGROUND.rgb)
+            context.drawText(textRenderer, Text.translatable(button), buttonX + 5, buttonY + 5, UIColors.WHITE.rgb, false)
+
+            buttonY += buttonHeight + 5
+        }
+    }
+
     private fun initSchemeHandler() {
         CefApp.getInstance().registerSchemeHandlerFactory("cubium", "") { _, _, _, request ->
             var url = request.url.lowercase(Locale.getDefault())
@@ -423,6 +510,12 @@ class BrowserScreen(val parent: Screen?) : Screen(Text.translatable("cubium.ui.b
                 "cubium://settings"
             )
 
+            if (url.startsWith("cubium://delete_bookmark?id=")) {
+                val id = request.url.split("id=")[1]
+                CubiumClient.bookmarkManager.deleteBookmark(id.toIntOrNull() ?: -1)
+                url = "cubium://bookmarks"
+            }
+
             if (url == "cubium://clear_history") {
                 CubiumClient.historyManager.history.clear()
                 url = "cubium://history"
@@ -432,48 +525,85 @@ class BrowserScreen(val parent: Screen?) : Screen(Text.translatable("cubium.ui.b
                 val customPage = when (url) {
                     "cubium://bookmarks" -> {
                         val bookmarks = CubiumClient.bookmarkManager.bookmarks
-                        val folders = mutableMapOf<String, MutableList<Pair<String, String>>>()
+                        val folders = mutableMapOf<String, MutableList<Triple<String, String, String>>>()
 
                         for (bookmark in bookmarks) {
                             val folder = bookmark.folder
-                            folders.computeIfAbsent(folder) { mutableListOf() }.add(Pair(bookmark.name, bookmark.url))
+                            folders.computeIfAbsent(folder) { mutableListOf() }.add(Triple(bookmark.id.toString(), bookmark.name, bookmark.url))
                         }
 
                         buildString {
-                            append("<html><body><h1>Cubium Bookmarks</h1>")
+                            append("""
+                                <html>
+                                    <body>
+                                        <h1>Cubium Bookmarks</h1>
+                            """.trimIndent())
 
                             for ((folder, bookmarksInFolder) in folders) {
                                 append("<h2>$folder</h2><ul>")
 
-                                for ((title, bUrl) in bookmarksInFolder)
-                                    append("""<li><a href="javascript:void(0);" onclick="window.location.href='$bUrl';">$title</a></li>""")
+                                for ((id, title, bUrl) in bookmarksInFolder) {
+                                    append("""
+                                        <li>
+                                            <a href="javascript:void(0);" onclick="window.location.href='$bUrl';">$title</a>
+                                            <button onclick="deleteBookmark('$id')">Delete</button>
+                                        </li>
+                                    """.trimIndent())
+                                }
 
                                 append("</ul>")
                             }
 
-                            append("</body></html>")
+                            append("""
+                                <script>
+                                    function deleteBookmark(id) {
+                                        window.location.href = "cubium://delete_bookmark?id=" + encodeURIComponent(id);
+                                    }
+                                </script>
+                                </body>
+                            </html>
+                            """.trimIndent())
                         }
                     }
 
                     "cubium://history" -> {
                         val history = CubiumClient.historyManager.history
 
+                        val groupedHistory = history.groupBy {
+                            val date = Date(it.time)
+                            val sdf = SimpleDateFormat("yyyy-MM-dd")
+                            sdf.format(date)
+                        }
+
                         buildString {
                             append("<html><body><h1>Cubium History</h1>")
                             append("<button onclick=\"clearHistory()\">Clear History</button>")
 
-                            append("<ul>")
-                            for (hUrl in history) {
-                                append("""<li><a href="javascript:void(0);" onclick="window.location.href='$hUrl';">$hUrl</a></li>""")
+                            for ((date, entries) in groupedHistory) {
+                                append("<h2>$date</h2>")
+
+                                append("<ul>")
+
+                                for (entry in entries.reversed()) {
+                                    val dateTime = Date(entry.time)
+                                    val sdfTime = SimpleDateFormat("HH:mm:ss")
+                                    val formattedTime = sdfTime.format(dateTime)
+
+                                    append("""
+                                        <li><span>$formattedTime</span> - <a href="javascript:void(0);" onclick="window.location.href='${entry.url}';">${entry.url}</a></li>
+                                    """)
+                                }
+
+                                append("</ul>")
                             }
-                            append("</ul>")
 
                             append("""
                                 <script>
-                                function clearHistory() {
-                                    window.location.href = 'cubium://clear_history';
-                                }
-                                </script>""")
+                                    function clearHistory() {
+                                        window.location.href = 'cubium://clear_history';
+                                    }
+                                </script>
+                            """)
 
                             append("</body></html>")
                         }

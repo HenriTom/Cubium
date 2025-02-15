@@ -11,6 +11,8 @@
   "cubium.ui.browser.home": "⌂",
   "cubium.ui.browser.bookmark": "☆",
   "cubium.ui.browser.bookmarked": "★",
+
+  "cubium.ui.browser.menu": "☰",
   "cubium.ui.browser.fullscreen": "⛶",
   "cubium.ui.browser.close": "✕",
 

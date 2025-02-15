@@ -11,8 +11,8 @@ class ResetDefaultSE {
     fun register(): LiteralArgumentBuilder<FabricClientCommandSource>? {
         return ClientCommandManager.literal("reset_default_se")
             .executes {
-                if (CubiumClient.historyManager.history.isNotEmpty() && CubiumClient.historyManager.history.last() == Text.translatable(CubiumClient.searchEngineManager.defaultSearchEngine?.url).string)
-                    CubiumClient.historyManager.history[CubiumClient.historyManager.history.size - 1] = ""
+                if (CubiumClient.historyManager.history.isNotEmpty() && CubiumClient.historyManager.history.last().url == Text.translatable(CubiumClient.searchEngineManager.defaultSearchEngine?.url).string)
+                    CubiumClient.historyManager.history[CubiumClient.historyManager.history.size - 1].url = ""
 
                 CubiumClient.searchEngineManager.defaultSearchEngine = null
 
