@@ -22,6 +22,8 @@
   "cubium.commands.info.modrinth": "§8» §7Cubium Modrinth: §fhttps://modrinth.com/mod/cubium",
   "cubium.commands.info.feedback": "§8» §7Melde Probleme oder schlage Funktionen vor, auf §fhttps://github.com/HenriTom/Cubium/issues/new/choose",
 
+  "cubium.default_se.none.title": "Keine",
+
   "cubium.default_se.google.title": "Google",
   "cubium.default_se.google.description": "Die weltweit führende Suchmaschine mit umfassenden Suchergebnissen.",
   "cubium.default_se.google.url": "https://www.google.de/",

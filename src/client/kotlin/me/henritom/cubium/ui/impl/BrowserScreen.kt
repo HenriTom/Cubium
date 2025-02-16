@@ -523,6 +523,21 @@ class BrowserScreen(val parent: Screen?) : Screen(Text.translatable("cubium.ui.b
                 url = "cubium://history"
             }
 
+            if (url == "cubium://reset_search_engine") {
+                if (CubiumClient.historyManager.history.isNotEmpty() && CubiumClient.historyManager.history.last().url == Text.translatable(CubiumClient.searchEngineManager.defaultSearchEngine?.url).string)
+                    CubiumClient.historyManager.history[CubiumClient.historyManager.history.size - 1].url = ""
+
+                CubiumClient.searchEngineManager.defaultSearchEngine = null
+                url = "cubium://settings"
+            }
+
+            if (url.startsWith("cubium://set_user_agent?ua=")) {
+                val ua = request.url.split("ua=")[1]
+
+                CubiumClient.userAgentManager.updateUserAgent(ua)
+                url = "cubium://settings"
+            }
+
             if (cubiumURLs.contains(url)) {
                 val customPage = when (url) {
                     "cubium://bookmarks" -> {
@@ -608,6 +623,43 @@ class BrowserScreen(val parent: Screen?) : Screen(Text.translatable("cubium.ui.b
                             """)
 
                             append("</body></html>")
+                        }
+                    }
+
+                    "cubium://settings" -> {
+                        buildString {
+                            val currentSearchEngine = Text.translatable(CubiumClient.searchEngineManager.defaultSearchEngine?.title ?: "cubium.default_se.none.title").string
+                            val userAgent = CubiumClient.userAgentManager.mcefAgent
+
+                            append("""
+                                <html>
+                                    <body>
+                                        <h1>Settings</h1>
+                                        
+                                        <h2>Search Engine</h2>
+                                        <p>Current Search Engine: $currentSearchEngine</p>
+                                        <button onclick="resetSearchEngine()">Change</button>
+                                        
+                                        <h2>User Agent</h2>
+                                        <textarea id="userAgentInput" placeholder="User-Agent" rows="3" style="width: 100%;">$userAgent</textarea> 
+                                        <br>
+                                        <button onclick="saveUserAgent()">Save</button>
+                                        <p>Note: You need to restart the game for the changes to take effect.</p>
+                                        <p>Leave empty to use the default MCEF user agent. Use 'random' to generate a random one.</p>
+                                        
+                                        <script>
+                                            function resetSearchEngine() {
+                                                window.location.href = "cubium://reset_search_engine";
+                                            }
+                                            
+                                            function saveUserAgent() {
+                                                let userAgent = document.getElementById("userAgentInput").value;
+                                                window.location.href = "cubium://set_user_agent?ua=" + encodeURIComponent(userAgent);
+                                            }
+                                        </script>
+                                    </body>
+                                </html>
+                            """.trimIndent())
                         }
                     }
 

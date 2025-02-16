@@ -4,8 +4,9 @@ import com.cinemamod.mcef.MCEFSettings
 
 class UserAgentManager {
 
-    var userAgent: String = ""
+    var userAgent = ""
     val userAgents = mutableListOf<UserAgent>()
+    var mcefAgent = ""
 
     private fun getRandomUserAgent(): UserAgent {
         return userAgents.random()
@@ -24,5 +25,7 @@ class UserAgentManager {
 
         else
             mcefSettings.userAgent = userAgent
+
+        mcefAgent = mcefSettings.userAgent
     }
 }
