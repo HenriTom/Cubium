@@ -381,8 +381,10 @@ class BrowserScreen(val parent: Screen?) : Screen(Text.translatable("cubium.ui.b
             var buttonY = menuY + 5
 
             for (url in buttons.values) {
-                if (mouseX >= buttonX && mouseX <= buttonX + buttonWidth && mouseY >= buttonY && mouseY <= buttonY + buttonHeight)
+                if (mouseX >= buttonX && mouseX <= buttonX + buttonWidth && mouseY >= buttonY && mouseY <= buttonY + buttonHeight) {
                     browser?.loadURL(url)
+                    menuOpened = false
+                }
 
                 buttonY += buttonHeight + 5
             }
