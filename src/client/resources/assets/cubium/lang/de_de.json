@@ -4,6 +4,12 @@
 
   "cubium.ui.select_se.title": "Wähle Suchmaschine",
 
+  "cubium.commands.info.version": "§8» §7Cubium v%s",
+  "cubium.commands.info.wiki": "§8» §7Cubium Wiki: §fhttps://github.com/HenriTom/Cubium/wiki",
+  "cubium.commands.info.discord": "§8» §7Cubium Discord: §fhttps://discord.gg/XdHBJKTvxJ",
+  "cubium.commands.info.modrinth": "§8» §7Cubium Modrinth: §fhttps://modrinth.com/mod/cubium",
+  "cubium.commands.info.feedback": "§8» §7Melde Probleme oder schlage Funktionen vor, auf §fhttps://github.com/HenriTom/Cubium/issues/new/choose",
+
   "cubium.ui.browser.title": "Browser",
 
   "cubium.ui.browser.previous": "<",
@@ -16,11 +22,23 @@
   "cubium.ui.browser.fullscreen": "⛶",
   "cubium.ui.browser.close": "✕",
 
-  "cubium.commands.info.version": "§8» §7Cubium v%s",
-  "cubium.commands.info.wiki": "§8» §7Cubium Wiki: §fhttps://github.com/HenriTom/Cubium/wiki",
-  "cubium.commands.info.discord": "§8» §7Cubium Discord: §fhttps://discord.gg/XdHBJKTvxJ",
-  "cubium.commands.info.modrinth": "§8» §7Cubium Modrinth: §fhttps://modrinth.com/mod/cubium",
-  "cubium.commands.info.feedback": "§8» §7Melde Probleme oder schlage Funktionen vor, auf §fhttps://github.com/HenriTom/Cubium/issues/new/choose",
+  "cubium.ui.browser.bookmarks": "Lesezeichen",
+  "cubium.ui.browser.bookmarks.title": "Cubium Lesezeichen",
+
+  "cubium.ui.browser.history": "Verlauf",
+  "cubium.ui.browser.history.title": "Cubium Verlauf",
+  "cubium.ui.browser.history.clear": "Verlauf leeren",
+
+  "cubium.ui.browser.settings": "Einstellungen",
+  "cubium.ui.browser.settings.title": "Cubium Einstellungen",
+  "cubium.ui.browser.settings.search_engine": "Suchmaschine",
+  "cubium.ui.browser.settings.search_engine.current": "Aktuelle Suchmaschine:",
+  "cubium.ui.browser.settings.search_engine.change": "Anpassen",
+
+  "cubium.ui.browser.settings.user_agent": "User Agent",
+  "cubium.ui.browser.settings.user_agent.save": "Speichern",
+  "cubium.ui.browser.settings.user_agent.note": "Notiz: Du musst dein Spiel neustarten, damit der User Agent angepasst wird.",
+  "cubium.ui.browser.settings.user_agent.info": "Leer lassen um den standart User Agent von MCEF zu verwenden. Benutze 'random' um einen neuen zu generieren.",
 
   "cubium.default_se.none.title": "Keine",
 

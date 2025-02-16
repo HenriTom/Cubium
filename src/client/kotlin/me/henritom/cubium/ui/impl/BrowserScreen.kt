@@ -364,9 +364,9 @@ class BrowserScreen(val parent: Screen?) : Screen(Text.translatable("cubium.ui.b
     override fun mouseClicked(mouseX: Double, mouseY: Double, button: Int): Boolean {
         if (menuOpened) {
             val buttons = mapOf(
-                Pair("Bookmarks", "cubium://bookmarks"),
-                Pair("History", "cubium://history"),
-                Pair("Settings", "cubium://settings")
+                Pair(Text.translatable("cubium.ui.browser.bookmarks").string, "cubium://bookmarks"),
+                Pair(Text.translatable("cubium.ui.browser.history").string, "cubium://history"),
+                Pair(Text.translatable("cubium.ui.browser.settings").string, "cubium://settings")
             )
 
             val menuWidth = buttons.keys.maxOf { textRenderer.getWidth(it) } + 20
@@ -475,9 +475,9 @@ class BrowserScreen(val parent: Screen?) : Screen(Text.translatable("cubium.ui.b
 
     private fun renderMenuOverlay(context: DrawContext, mouseX: Int, mouseY: Int) {
         val buttons = listOf(
-            "Bookmarks",
-            "History",
-            "Settings"
+            Text.translatable("cubium.ui.browser.bookmarks").string,
+            Text.translatable("cubium.ui.browser.history").string,
+            Text.translatable("cubium.ui.browser.settings").string
         )
 
         val menuWidth = buttons.maxOf { textRenderer.getWidth(it) } + 20
@@ -553,7 +553,7 @@ class BrowserScreen(val parent: Screen?) : Screen(Text.translatable("cubium.ui.b
                             append("""
                                 <html>
                                     <body>
-                                        <h1>Cubium Bookmarks</h1>
+                                        <h1>${Text.translatable("cubium.ui.browser.bookmarks.title").string}</h1>
                             """.trimIndent())
 
                             for ((folder, bookmarksInFolder) in folders) {
@@ -595,8 +595,8 @@ class BrowserScreen(val parent: Screen?) : Screen(Text.translatable("cubium.ui.b
                         val sortedGroupedHistory = groupedHistory.toSortedMap(reverseOrder())
 
                         buildString {
-                            append("<html><body><h1>Cubium History</h1>")
-                            append("<button onclick=\"clearHistory()\">Clear History</button>")
+                            append("<html><body><h1>${Text.translatable("cubium.ui.browser.history.title").string}</h1>")
+                            append("<button onclick=\"clearHistory()\">${Text.translatable("cubium.ui.browser.history.clear").string}</button>")
 
                             for ((date, entries) in sortedGroupedHistory) {
                                 append("<h2>$date</h2>")
@@ -636,18 +636,18 @@ class BrowserScreen(val parent: Screen?) : Screen(Text.translatable("cubium.ui.b
                             append("""
                                 <html>
                                     <body>
-                                        <h1>Settings</h1>
+                                        <h1>${Text.translatable("cubium.ui.browser.settings.title").string}</h1>
                                         
-                                        <h2>Search Engine</h2>
-                                        <p>Current Search Engine: $currentSearchEngine</p>
-                                        <button onclick="resetSearchEngine()">Change</button>
+                                        <h2>${Text.translatable("cubium.ui.browser.settings.search_engine").string}</h2>
+                                        <p>${Text.translatable("cubium.ui.browser.settings.search_engine.current").string} $currentSearchEngine</p>
+                                        <button onclick="resetSearchEngine()">${Text.translatable("cubium.ui.browser.settings.search_engine.change").string}</button>
                                         
-                                        <h2>User Agent</h2>
-                                        <textarea id="userAgentInput" placeholder="User-Agent" rows="3" style="width: 100%;">$userAgent</textarea> 
+                                        <h2>${Text.translatable("cubium.ui.browser.settings.user_agent").string}</h2>
+                                        <textarea id="userAgentInput" placeholder="${Text.translatable("cubium.ui.browser.settings.user_agent").string}" rows="3" style="width: 100%;">$userAgent</textarea> 
                                         <br>
-                                        <button onclick="saveUserAgent()">Save</button>
-                                        <p>Note: You need to restart the game for the changes to take effect.</p>
-                                        <p>Leave empty to use the default MCEF user agent. Use 'random' to generate a random one.</p>
+                                        <button onclick="saveUserAgent()">${Text.translatable("cubium.ui.browser.settings.user_agent.save").string}</button>
+                                        <p>${Text.translatable("cubium.ui.browser.settings.user_agent.note").string}</p>
+                                        <p>${Text.translatable("cubium.ui.browser.settings.user_agent.info").string}</p>
                                         
                                         <script>
                                             function resetSearchEngine() {
