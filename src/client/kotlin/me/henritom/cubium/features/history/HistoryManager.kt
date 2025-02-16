@@ -3,7 +3,7 @@ package me.henritom.cubium.features.history
 class HistoryManager {
 
     var lastUrl = ""
-    val history = mutableListOf<History>()
+    var history = mutableListOf<History>()
 
     fun add(url: String): Boolean {
         if (url.isEmpty() || url == history.lastOrNull()?.url || url == lastUrl)

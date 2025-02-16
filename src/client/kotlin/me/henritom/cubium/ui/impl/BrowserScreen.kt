@@ -592,11 +592,13 @@ class BrowserScreen(val parent: Screen?) : Screen(Text.translatable("cubium.ui.b
                             sdf.format(date)
                         }
 
+                        val sortedGroupedHistory = groupedHistory.toSortedMap(reverseOrder())
+
                         buildString {
                             append("<html><body><h1>Cubium History</h1>")
                             append("<button onclick=\"clearHistory()\">Clear History</button>")
 
-                            for ((date, entries) in groupedHistory) {
+                            for ((date, entries) in sortedGroupedHistory) {
                                 append("<h2>$date</h2>")
 
                                 append("<ul>")

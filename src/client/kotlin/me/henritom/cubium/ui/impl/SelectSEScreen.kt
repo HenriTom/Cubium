@@ -1,7 +1,7 @@
 package me.henritom.cubium.ui.impl
 
 import me.henritom.cubium.CubiumClient
-import me.henritom.cubium.ui.RenderUtil
+import me.henritom.cubium.util.RenderUtil
 import me.henritom.cubium.ui.UIColors
 import net.minecraft.client.gui.DrawContext
 import net.minecraft.client.gui.screen.Screen

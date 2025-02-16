@@ -1,5 +1,6 @@
 package me.henritom.cubium.config
 
+import HistoryListContainer
 import com.google.gson.Gson
 import com.google.gson.GsonBuilder
 import kotlinx.serialization.json.Json
@@ -120,5 +121,39 @@ class ConfigManager {
         val data = Gson().fromJson(configFile.readText(), Map::class.java) as Map<*, *>
         CubiumClient.searchEngineManager.defaultSearchEngine = CubiumClient.searchEngineManager.getSearchEngineByTitle(data["default_se"] as? String ?: "")
         CubiumClient.userAgentManager.updateUserAgent(data["user_agent"] as? String ?: "")
+    }
+
+    fun saveHistory() {
+        val gson = GsonBuilder().setPrettyPrinting().create()
+
+        val historyFile = configPath.resolve("history.json")
+
+        if (!historyFile.parentFile.exists())
+            historyFile.parentFile.mkdirs()
+
+        if (!historyFile.exists())
+            historyFile.createNewFile()
+
+        val data = mapOf(
+            "history" to CubiumClient.historyManager.history
+        )
+
+        historyFile.writeText(gson.toJson(data))
+    }
+
+    fun loadHistory() {
+        val historyFile = configPath.resolve("history.json")
+
+        if (!historyFile.exists() || historyFile.isDirectory)
+            return
+
+        try {
+            val jsonInput = historyFile.readText(StandardCharsets.UTF_8)
+            val container = Json.decodeFromString<HistoryListContainer>(jsonInput)
+
+            CubiumClient.historyManager.history = container.history.toMutableList()
+        } catch (e: Exception) {
+            e.printStackTrace()
+        }
     }
 }

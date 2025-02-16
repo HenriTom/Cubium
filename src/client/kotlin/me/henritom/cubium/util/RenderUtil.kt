@@ -1,4 +1,4 @@
-package me.henritom.cubium.ui
+package me.henritom.cubium.util
 
 import net.minecraft.client.font.TextRenderer
 import net.minecraft.client.gui.DrawContext

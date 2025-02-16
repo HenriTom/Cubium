@@ -35,6 +35,8 @@ object CubiumClient : ClientModInitializer {
 
 					configManager.loadConfig()
 
+					configManager.loadHistory()
+
 					loaded = true
 				}
 			}
@@ -42,6 +44,8 @@ object CubiumClient : ClientModInitializer {
 
 		Runtime.getRuntime().addShutdownHook(Thread {
 			configManager.saveConfig()
+
+			configManager.saveHistory()
 		})
 	}
 }
