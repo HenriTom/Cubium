@@ -2,7 +2,7 @@ package me.henritom.cubium.features.bookmark
 
 class BookmarkManager {
 
-    val bookmarks = mutableListOf<Bookmark>()
+    var bookmarks = mutableListOf<Bookmark>()
 
     fun deleteBookmark(id: Int) {
         bookmarks.removeIf { it.id == id }

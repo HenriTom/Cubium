@@ -1,5 +1,6 @@
 package me.henritom.cubium.config
 
+import BookmarkListContainer
 import HistoryListContainer
 import com.google.gson.Gson
 import com.google.gson.GsonBuilder
@@ -152,6 +153,40 @@ class ConfigManager {
             val container = Json.decodeFromString<HistoryListContainer>(jsonInput)
 
             CubiumClient.historyManager.history = container.history.toMutableList()
+        } catch (e: Exception) {
+            e.printStackTrace()
+        }
+    }
+
+    fun saveBookmarks() {
+        val gson = GsonBuilder().setPrettyPrinting().create()
+
+        val bookmarksFile = configPath.resolve("bookmarks.json")
+
+        if (!bookmarksFile.parentFile.exists())
+            bookmarksFile.parentFile.mkdirs()
+
+        if (!bookmarksFile.exists())
+            bookmarksFile.createNewFile()
+
+        val data = mapOf(
+            "bookmarks" to CubiumClient.bookmarkManager.bookmarks
+        )
+
+        bookmarksFile.writeText(gson.toJson(data))
+    }
+
+    fun loadBookmarks() {
+        val bookmarksFile = configPath.resolve("bookmarks.json")
+
+        if (!bookmarksFile.exists() || bookmarksFile.isDirectory)
+            return
+
+        try {
+            val jsonInput = bookmarksFile.readText(StandardCharsets.UTF_8)
+            val container = Json.decodeFromString<BookmarkListContainer>(jsonInput)
+
+            CubiumClient.bookmarkManager.bookmarks = container.bookmarks.toMutableList()
         } catch (e: Exception) {
             e.printStackTrace()
         }

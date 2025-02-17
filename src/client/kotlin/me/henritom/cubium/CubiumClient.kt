@@ -36,6 +36,7 @@ object CubiumClient : ClientModInitializer {
 					configManager.loadConfig()
 
 					configManager.loadHistory()
+					configManager.loadBookmarks()
 
 					loaded = true
 				}
@@ -46,6 +47,7 @@ object CubiumClient : ClientModInitializer {
 			configManager.saveConfig()
 
 			configManager.saveHistory()
+			configManager.saveBookmarks()
 		})
 	}
 }
