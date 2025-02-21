@@ -26,6 +26,9 @@ If you want to use Quilt, you'll need to use the [Quilted Fabric API](https://mo
 5. To reset your search engine (if you want to change it), use the command:  
     **/cubium reset_default_se**
 
+## 🧩 Works Great with TMYK
+Cubium works seamlessly with the [TMYK](https://modrinth.com/plugin/tmyk) mod by fingerguns83. TMYK allows you to easily access wiki links by typing **/wiki [search term]**, or simply **/wiki** to look up information about blocks, entities, or fluids you're currently looking at.
+
 ## 📖 Wiki
 
 If you need help, you can check the [wiki](https://github.com/HenriTom/Cubium/wiki) for additional information and guides, join our Discord server [here](https://discord.gg/XdHBJKTvxJ), or open an issue on GitHub [here](https://github.com/HenriTom/Cubium/issues/new/choose).
