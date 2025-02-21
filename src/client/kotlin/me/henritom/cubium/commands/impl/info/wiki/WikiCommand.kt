@@ -11,7 +11,7 @@ object WikiCommand {
     fun register(): LiteralArgumentBuilder<FabricClientCommandSource>? {
         return ClientCommandManager.literal("wiki")
             .executes {
-                MessageUtil.printTranslatableClickable("cubium.commands.info.wiki", "https://github.com/Cubium/wiki")
+                MessageUtil.printTranslatableClickable("cubium.commands.info.wiki", "https://github.com/HenriTom/cubium/wiki")
 
                 Command.SINGLE_SUCCESS
             }
