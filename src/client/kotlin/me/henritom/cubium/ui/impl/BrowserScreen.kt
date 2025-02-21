@@ -27,7 +27,12 @@ import java.util.*
 import kotlin.math.min
 
 
-class BrowserScreen(val parent: Screen?) : Screen(Text.translatable("cubium.ui.browser.title")) {
+class BrowserScreen(val parent: Screen?, private val loadUrl: String? = null) : Screen(Text.translatable("cubium.ui.browser.title")) {
+
+    companion object {
+        @JvmField
+        val specialSchemes = listOf("chrome://", "cubium://", "about:", "file:", "http://", "https://")
+    }
 
     private var defaultBrowserOffset = 40f
     private var browserOffset = defaultBrowserOffset
@@ -69,7 +74,7 @@ class BrowserScreen(val parent: Screen?) : Screen(Text.translatable("cubium.ui.b
 
         if (browser == null) {
             val defaultUrl = Text.translatable(CubiumClient.searchEngineManager.defaultSearchEngine!!.url).string
-            browser = MCEF.createBrowser(CubiumClient.historyManager.history.lastOrNull()?.url?.ifEmpty { defaultUrl } ?: defaultUrl, false)
+            browser = MCEF.createBrowser(loadUrl ?: CubiumClient.historyManager.history.lastOrNull()?.url?.ifEmpty { defaultUrl } ?: defaultUrl, false)
 
             resizeBrowser()
         }
@@ -433,7 +438,6 @@ class BrowserScreen(val parent: Screen?) : Screen(Text.translatable("cubium.ui.b
                 var url = addressBar!!.text
 
                 val domainRegex = Regex("^(https?://)?([a-zA-Z0-9.-]+\\.[a-zA-Z]{2,})$")
-                val specialSchemes = listOf("chrome://", "cubium://", "about:", "file:", "http://", "https://")
 
                 url = when {
                     specialSchemes.any { url.startsWith(it) } -> url.replace("cubium-urls", "chrome-urls")

@@ -10,6 +10,8 @@
   "cubium.commands.info.modrinth": "§8» §7Cubium Modrinth: §fhttps://modrinth.com/mod/cubium",
   "cubium.commands.info.feedback": "§8» §7Melde Probleme oder schlage Funktionen vor, auf §fhttps://github.com/HenriTom/Cubium/issues/new/choose",
 
+  "cubium.ui.confirm.button": "In Cubium öffnen",
+
   "cubium.ui.browser.title": "Browser",
 
   "cubium.ui.browser.previous": "<",

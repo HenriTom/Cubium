@@ -1,11 +1,11 @@
 {
-	"required": true,
-	"package": "me.henritom.cubium.mixin.client",
-	"compatibilityLevel": "JAVA_21",
-	"client": [
-		"ExampleClientMixin"
-	],
-	"injectors": {
-		"defaultRequire": 1
+  "required": true,
+  "package": "me.henritom.cubium.mixin.client",
+  "compatibilityLevel": "JAVA_21",
+  "client": [
+    "ConfirmScreenMixin"
+  ],
+  "injectors": {
+    "defaultRequire": 1
 	}
 }
