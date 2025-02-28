@@ -3,6 +3,17 @@
   "cubium.options.open_browser": "Open Browser",
 
   "cubium.ui.select_se.title": "Select Search Engine",
+  "cubium.ui.select_se.deletion_note": "Press middle mouse button to delete a search engine.",
+  "cubium.ui.select_se.reset_button": "Reset to default",
+  "cubium.ui.select_se.add_button": "Add Search Engine",
+
+  "cubium.ui.add_se.title": "Add Search Engine",
+  "cubium.ui.add_se.se_title": "Title",
+  "cubium.ui.add_se.se_description": "Description",
+  "cubium.ui.add_se.se_url": "URL",
+  "cubium.ui.add_se.se_search_url": "Search URL",
+  "cubium.ui.add_se.cancel_button": "Cancel",
+  "cubium.ui.add_se.add_button": "Add",
 
   "cubium.commands.info.version": "§8» §7Cubium v%s",
   "cubium.commands.info.wiki": "§8» §7Cubium Wiki: §fhttps://github.com/HenriTom/Cubium/wiki",
@@ -87,5 +98,10 @@
   "cubium.default_se.brave.title": "Brave",
   "cubium.default_se.brave.description": "A private search engine that operates without relying on third-party indexes.",
   "cubium.default_se.brave.url": "https://search.brave.com/",
-  "cubium.default_se.brave.searchUrl": "https://search.brave.com/search?q="
+  "cubium.default_se.brave.searchUrl": "https://search.brave.com/search?q=",
+
+  "cubium.default_se.privacywall.title": "PrivacyWall",
+  "cubium.default_se.privacywall.description": "A privacy-focused search engine that does not track or store user data.",
+  "cubium.default_se.privacywall.url": "https://www.privacywall.org/",
+  "cubium.default_se.privacywall.searchUrl": "https://www.privacywall.org/search/secure?q="
 }

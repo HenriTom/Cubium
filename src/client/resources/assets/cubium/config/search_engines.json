@@ -52,5 +52,11 @@
     "description": "cubium.default_se.brave.description",
     "url": "cubium.default_se.brave.url",
     "searchUrl": "cubium.default_se.brave.searchUrl"
+  },
+  {
+    "title": "cubium.default_se.privacywall.title",
+    "description": "cubium.default_se.privacywall.description",
+    "url": "cubium.default_se.privacywall.url",
+    "searchUrl": "cubium.default_se.privacywall.searchUrl"
   }
 ]

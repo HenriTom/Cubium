@@ -68,7 +68,7 @@ class BrowserScreen(val parent: Screen?, private val loadUrl: String? = null) : 
         }
 
         if (CubiumClient.searchEngineManager.defaultSearchEngine == null) {
-            client!!.setScreen(SelectSEScreen(null))
+            client!!.setScreen(SelectSEScreen(null, true))
             return
         }
 
@@ -87,7 +87,7 @@ class BrowserScreen(val parent: Screen?, private val loadUrl: String? = null) : 
             return
 
         if (CubiumClient.searchEngineManager.defaultSearchEngine == null) {
-            client!!.setScreen(SelectSEScreen(null))
+            client!!.setScreen(SelectSEScreen(null, true))
             return
         }
 

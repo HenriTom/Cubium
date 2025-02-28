@@ -20,6 +20,16 @@ class ConfigManager {
     private var client = MinecraftClient.getInstance()
     private val configPath = FabricLoader.getInstance().configDir.resolve("cubium").toFile()
 
+    fun deleteSearchEngines() {
+        if (client == null)
+            client = MinecraftClient.getInstance()
+
+        val searchEnginesFile = File(configPath, "search_engines.json")
+
+        if (searchEnginesFile.exists())
+            searchEnginesFile.delete()
+    }
+
     fun checkForSearchEngines() {
         if (client == null)
             client = MinecraftClient.getInstance()
@@ -48,10 +58,8 @@ class ConfigManager {
         if (client == null)
             client = MinecraftClient.getInstance()
 
-        val identifier = Identifier.of("cubium", "config/search_engines.json")
-
         try {
-            val jsonInput = client.resourceManager.getResource(identifier).get().inputStream.reader(StandardCharsets.UTF_8).readText()
+            val jsonInput = configPath.resolve("search_engines.json").reader(StandardCharsets.UTF_8).readText()
             val searchEngines = Json.decodeFromString<List<SearchEngine>>(jsonInput)
 
             for (searchEngine in searchEngines)
@@ -62,18 +70,20 @@ class ConfigManager {
     }
 
     fun addSearchEngine(engine: SearchEngine): Boolean {
+        val json = Json { prettyPrint = true }
         val jsonInput = File(configPath, "search_engines.json").readText()
         val searchEngines = Json.decodeFromString<MutableList<SearchEngine>>(jsonInput)
         searchEngines.add(engine)
-        File(configPath, "search_engines.json").writeText(Json.encodeToString(searchEngines))
+        File(configPath, "search_engines.json").writeText(json.encodeToString(searchEngines))
         return true
     }
 
     fun removeSearchEngine(engine: SearchEngine): Boolean {
+        val json = Json { prettyPrint = true }
         val jsonInput = File(configPath, "search_engines.json").readText()
         val searchEngines = Json.decodeFromString<MutableList<SearchEngine>>(jsonInput)
         searchEngines.remove(engine)
-        File(configPath, "search_engines.json").writeText(Json.encodeToString(searchEngines))
+        File(configPath, "search_engines.json").writeText(json.encodeToString(searchEngines))
         return true
     }
 
