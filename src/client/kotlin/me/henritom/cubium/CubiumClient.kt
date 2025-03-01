@@ -6,9 +6,11 @@ import me.henritom.cubium.features.bookmark.BookmarkManager
 import me.henritom.cubium.features.history.HistoryManager
 import me.henritom.cubium.features.uas.UserAgentManager
 import me.henritom.cubium.keybinds.KeyBindManager
+import me.henritom.cubium.overlay.BrowserOverlay
 import me.henritom.cubium.search.SearchEngineManager
 import net.fabricmc.api.ClientModInitializer
 import net.fabricmc.fabric.api.client.event.lifecycle.v1.ClientTickEvents
+import net.fabricmc.fabric.api.client.rendering.v1.HudRenderCallback
 
 object CubiumClient : ClientModInitializer {
 
@@ -39,6 +41,8 @@ object CubiumClient : ClientModInitializer {
 					configManager.loadBookmarks()
 
 					loaded = true
+
+					HudRenderCallback.EVENT.register(BrowserOverlay())
 				}
 			}
 		}

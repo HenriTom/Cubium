@@ -54,6 +54,8 @@
   "cubium.ui.browser.settings.user_agent.note": "Note: You need to restart the game for the changes to take effect.",
   "cubium.ui.browser.settings.user_agent.info": "Leave empty to use the default MCEF user agent. Use 'random' to generate a random one.",
 
+  "cubium.ui.browser.pop_out": "Pop-Out",
+
   "cubium.default_se.none.title": "None",
 
   "cubium.default_se.google.title": "Google",

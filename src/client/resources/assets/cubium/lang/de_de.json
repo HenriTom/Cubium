@@ -54,6 +54,8 @@
   "cubium.ui.browser.settings.user_agent.note": "Notiz: Du musst dein Spiel neustarten, damit der User Agent angepasst wird.",
   "cubium.ui.browser.settings.user_agent.info": "Leer lassen um den standart User Agent von MCEF zu verwenden. Benutze 'random' um einen neuen zu generieren.",
 
+  "cubium.ui.browser.pop_out": "Pop-Out",
+
   "cubium.default_se.none.title": "Keine",
 
   "cubium.default_se.google.title": "Google",

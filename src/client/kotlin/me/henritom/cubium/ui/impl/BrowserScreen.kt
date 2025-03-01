@@ -6,6 +6,7 @@ import com.mojang.blaze3d.systems.RenderSystem
 import me.henritom.cubium.CubiumClient
 import me.henritom.cubium.features.bookmark.Bookmark
 import me.henritom.cubium.features.minimize.BrowserSaver.Companion.browser
+import me.henritom.cubium.overlay.BrowserOverlay
 import me.henritom.cubium.ui.UIColors
 import net.minecraft.client.MinecraftClient
 import net.minecraft.client.gl.ShaderProgramKeys
@@ -55,6 +56,8 @@ class BrowserScreen(val parent: Screen?, private val loadUrl: String? = null) : 
         super.init()
 
         if (browserOffset == defaultBrowserOffset) {
+            BrowserOverlay.enabled = false
+
             lastButton = null
             reloadButton = null
             homeButton = null
@@ -398,7 +401,8 @@ class BrowserScreen(val parent: Screen?, private val loadUrl: String? = null) : 
             val buttons = mapOf(
                 Pair(Text.translatable("cubium.ui.browser.bookmarks").string, "cubium://bookmarks"),
                 Pair(Text.translatable("cubium.ui.browser.history").string, "cubium://history"),
-                Pair(Text.translatable("cubium.ui.browser.settings").string, "cubium://settings")
+                Pair(Text.translatable("cubium.ui.browser.settings").string, "cubium://settings"),
+                Pair(Text.translatable("cubium.ui.browser.pop_out").string, "cubium://popout")
             )
 
             val menuWidth = buttons.keys.maxOf { textRenderer.getWidth(it) } + 20
@@ -414,6 +418,13 @@ class BrowserScreen(val parent: Screen?, private val loadUrl: String? = null) : 
 
             for (url in buttons.values) {
                 if (mouseX >= buttonX && mouseX <= buttonX + buttonWidth && mouseY >= buttonY && mouseY <= buttonY + buttonHeight) {
+                    if (url == "cubium://popout") {
+                        menuOpened = false
+                        BrowserOverlay.enabled = true
+                        close()
+                        return true
+                    }
+
                     browser?.loadURL(url)
                     menuOpened = false
                 }
@@ -511,7 +522,8 @@ class BrowserScreen(val parent: Screen?, private val loadUrl: String? = null) : 
         val buttons = listOf(
             Text.translatable("cubium.ui.browser.bookmarks").string,
             Text.translatable("cubium.ui.browser.history").string,
-            Text.translatable("cubium.ui.browser.settings").string
+            Text.translatable("cubium.ui.browser.settings").string,
+            Text.translatable("cubium.ui.browser.pop_out").string
         )
 
         val menuWidth = buttons.maxOf { textRenderer.getWidth(it) } + 20
