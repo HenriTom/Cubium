@@ -2,10 +2,10 @@ package me.henritom.cubium.ui.impl
 
 import CubiumDownloadHandler
 import com.cinemamod.mcef.MCEF
-import com.cinemamod.mcef.MCEFBrowser
 import com.mojang.blaze3d.systems.RenderSystem
 import me.henritom.cubium.CubiumClient
 import me.henritom.cubium.features.bookmark.Bookmark
+import me.henritom.cubium.features.minimize.BrowserSaver.Companion.browser
 import me.henritom.cubium.ui.UIColors
 import net.minecraft.client.MinecraftClient
 import net.minecraft.client.gl.ShaderProgramKeys
@@ -27,7 +27,6 @@ import java.text.SimpleDateFormat
 import java.util.*
 import kotlin.math.min
 
-
 class BrowserScreen(val parent: Screen?, private val loadUrl: String? = null) : Screen(Text.translatable("cubium.ui.browser.title")) {
 
     companion object {
@@ -37,7 +36,6 @@ class BrowserScreen(val parent: Screen?, private val loadUrl: String? = null) : 
 
     private var defaultBrowserOffset = 40f
     private var browserOffset = defaultBrowserOffset
-    private var browser: MCEFBrowser? = null
     private var menuOpened = false
 
     private var lastButton: ButtonWidget? = null
@@ -49,6 +47,7 @@ class BrowserScreen(val parent: Screen?, private val loadUrl: String? = null) : 
     private var addressBarWasSelected = false
 
     private var menuButton: ButtonWidget? = null
+    private var minimizeButton: ButtonWidget? = null
     private var fullscreenButton: ButtonWidget? = null
     private var closeButton: ButtonWidget? = null
 
@@ -64,6 +63,7 @@ class BrowserScreen(val parent: Screen?, private val loadUrl: String? = null) : 
             addressBar = null
 
             menuButton = null
+            minimizeButton = null
             fullscreenButton = null
             closeButton = null
         }
@@ -182,7 +182,7 @@ class BrowserScreen(val parent: Screen?, private val loadUrl: String? = null) : 
                 textRenderer,
                 (defaultBrowserOffset + 80).toInt(),
                 (defaultBrowserOffset - 20).toInt(),
-                (width - 140 - defaultBrowserOffset * 2).toInt(),
+                (width - 160 - defaultBrowserOffset * 2).toInt(),
                 20,
                 Text.translatable("cubium.ui.browser.title")
             )
@@ -209,7 +209,7 @@ class BrowserScreen(val parent: Screen?, private val loadUrl: String? = null) : 
 
                 return@builder
             }
-                .dimensions((width - defaultBrowserOffset - 60).toInt(), 20, 20, 20)
+                .dimensions((width - defaultBrowserOffset - 80).toInt(), 20, 20, 20)
                 .build()
 
             addDrawableChild(menuButton)
@@ -218,6 +218,24 @@ class BrowserScreen(val parent: Screen?, private val loadUrl: String? = null) : 
         if (MinecraftClient.getInstance().currentScreen?.focused == menuButton) {
             MinecraftClient.getInstance().currentScreen?.focused = null
             menuButton!!.isFocused = false
+        }
+
+        // Minimize Button
+        if (minimizeButton == null) {
+            minimizeButton = ButtonWidget.builder(Text.translatable("cubium.ui.browser.minimize")) {
+                close()
+
+                return@builder
+            }
+                .dimensions((width - defaultBrowserOffset - 60).toInt(), 20, 20, 20)
+                .build()
+
+            addDrawableChild(minimizeButton)
+        }
+
+        if (MinecraftClient.getInstance().currentScreen?.focused == minimizeButton) {
+            MinecraftClient.getInstance().currentScreen?.focused = null
+            minimizeButton!!.isFocused = false
         }
 
         // FullScreen Button
@@ -241,7 +259,7 @@ class BrowserScreen(val parent: Screen?, private val loadUrl: String? = null) : 
         // Close Button
         if (closeButton == null) {
             closeButton = ButtonWidget.builder(Text.translatable("cubium.ui.browser.close")) {
-                close()
+                exit()
 
                 return@builder
             }
@@ -326,6 +344,14 @@ class BrowserScreen(val parent: Screen?, private val loadUrl: String? = null) : 
         closeButton?.visible = visible
     }
 
+    private fun exit() {
+        browser!!.close()
+
+        close()
+
+        browser = null
+    }
+
     override fun close() {
         if (browser == null)
             return
@@ -336,8 +362,6 @@ class BrowserScreen(val parent: Screen?, private val loadUrl: String? = null) : 
         }
 
         CubiumClient.historyManager.add(browser?.getURL().toString())
-
-        browser!!.close()
 
         super.close()
     }

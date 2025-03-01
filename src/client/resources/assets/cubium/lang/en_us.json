@@ -32,6 +32,7 @@
   "cubium.ui.browser.bookmarked": "★",
 
   "cubium.ui.browser.menu": "☰",
+  "cubium.ui.browser.minimize": "−",
   "cubium.ui.browser.fullscreen": "⛶",
   "cubium.ui.browser.close": "✕",
 
