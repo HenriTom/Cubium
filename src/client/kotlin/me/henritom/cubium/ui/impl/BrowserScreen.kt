@@ -1,5 +1,6 @@
 package me.henritom.cubium.ui.impl
 
+import CubiumDownloadHandler
 import com.cinemamod.mcef.MCEF
 import com.cinemamod.mcef.MCEFBrowser
 import com.mojang.blaze3d.systems.RenderSystem
@@ -75,6 +76,8 @@ class BrowserScreen(val parent: Screen?, private val loadUrl: String? = null) : 
         if (browser == null) {
             val defaultUrl = Text.translatable(CubiumClient.searchEngineManager.defaultSearchEngine!!.url).string
             browser = MCEF.createBrowser(loadUrl ?: CubiumClient.historyManager.history.lastOrNull()?.url?.ifEmpty { defaultUrl } ?: defaultUrl, false)
+
+            browser!!.client.addDownloadHandler(CubiumDownloadHandler())
 
             resizeBrowser()
         }
