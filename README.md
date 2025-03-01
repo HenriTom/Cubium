@@ -14,6 +14,9 @@ If you want to use Quilt, you'll need to use the [Quilted Fabric API](https://mo
 
 - **Fully Integrated Browser:** Surf the web while staying in Minecraft.  
 - **Customizable Search Engines:** Choose your preferred search engine for a optimized browsing experience.  
+- **Picture-in-Picture Mode:** Use a floating, movable window to browse while playing.
+- **Minimizable Window:** Minimize the browser while keeping audio and processes active.
+- **File Downloads:** Download files directly through the browser without leaving Minecraft.
 - **Client-Side Only:** No server-side dependencies; works in any singleplayer or multiplayer environment.  
 - **User-Friendly Interface:** Designed for ease of use, just like a regular browser.  
 
@@ -40,3 +43,6 @@ If you need help, you can check the [wiki](https://github.com/HenriTom/Cubium/wi
 
 **Browser Example (On the [Wikipedia Main Page](https://en.wikipedia.org/wiki/Main_Page)):**
 ![Browser Example](https://cdn.modrinth.com/data/cached_images/9558e526815294cee5975ea01c7ab99eaad2b5f8.png)
+
+**Picture in Picture Example (On [YouTube](https://www.youtube.com/watch?v=LplgwgO91y4)):**
+![PiP](https://cdn.modrinth.com/data/cached_images/e7e52955545d7453a7701032df9949d20bfb14c8.png)
