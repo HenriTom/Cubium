@@ -458,6 +458,9 @@ class BrowserScreen(val parent: Screen?, private val loadUrl: String? = null) : 
     }
 
     override fun keyPressed(keyCode: Int, scanCode: Int, modifiers: Int): Boolean {
+        if (keyCode == 294)
+            browser?.loadURL(browser?.getURL() ?: "")
+
         if (addressBar != null && addressBar!!.isFocused)
             if (keyCode == 257) {
                 addressBar!!.isFocused = false
