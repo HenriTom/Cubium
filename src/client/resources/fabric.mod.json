@@ -1,7 +1,7 @@
 {
 	"schemaVersion": 1,
 	"id": "cubium",
-	"version": "1.0.2",
+	"version": "1.1.0",
 	"name": "Cubium",
 	"description": "A client-side Minecraft mod that integrates a Chromium-based browser directly into the game, allowing you to access websites without tabbing out.",
 	"authors": [
