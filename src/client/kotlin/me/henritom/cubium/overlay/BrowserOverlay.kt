@@ -13,18 +13,23 @@ import org.lwjgl.glfw.GLFW
 
 class BrowserOverlay : HudRenderCallback {
 
-    companion object {
-        var enabled = false
-    }
-
     private var client = MinecraftClient.getInstance()
 
     private var posX = 20F
     private var posY = 20F
 
+    companion object {
+        var enabled = false
+
+        fun scroll(amount: Int) {
+            if (browser != null)
+                browser!!.sendMouseWheel(MinecraftClient.getInstance()?.window?.width?.div(2) ?: 100, MinecraftClient.getInstance()?.window?.height?.div(2) ?: 100, amount.toDouble(), 0)
+        }
+    }
+
     init {
         ClientTickEvents.END_CLIENT_TICK.register { client ->
-            if (client.currentScreen !is ChatScreen)
+            if (!enabled || client.currentScreen !is ChatScreen)
                 return@register
 
             val dragging = GLFW.glfwGetMouseButton(client.window.handle, GLFW.GLFW_MOUSE_BUTTON_LEFT) == GLFW.GLFW_PRESS
