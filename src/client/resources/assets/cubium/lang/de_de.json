@@ -1,6 +1,8 @@
 {
   "cubium.options.category": "Cubium",
   "cubium.options.open_browser": "Öffne Browser",
+  "cubium.options.scroll_up": "Hochscrollen",
+  "cubium.options.scroll_down": "Runterscrollen",
 
   "cubium.ui.select_se.title": "Wähle Suchmaschine",
   "cubium.ui.select_se.deletion_note": "Mittlere Maustaste drücken, um eine Suchmaschine zu löschen.",
