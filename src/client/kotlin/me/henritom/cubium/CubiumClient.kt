@@ -2,6 +2,7 @@ package me.henritom.cubium
 
 import me.henritom.cubium.commands.CubiumCommand
 import me.henritom.cubium.config.ConfigManager
+import me.henritom.cubium.features.warden.Warden
 import me.henritom.cubium.features.bookmark.BookmarkManager
 import me.henritom.cubium.features.history.HistoryManager
 import me.henritom.cubium.features.uas.UserAgentManager
@@ -15,6 +16,8 @@ import net.fabricmc.fabric.api.client.rendering.v1.HudRenderCallback
 object CubiumClient : ClientModInitializer {
 
 	private var loaded = false
+
+	val warden = Warden()
 
 	private val keyBindManager = KeyBindManager()
 	val configManager = ConfigManager()
@@ -39,6 +42,8 @@ object CubiumClient : ClientModInitializer {
 
 					configManager.loadHistory()
 					configManager.loadBookmarks()
+
+					warden.loadDefaults()
 
 					loaded = true
 

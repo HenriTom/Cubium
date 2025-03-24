@@ -2,6 +2,7 @@ package me.henritom.cubium.ui.impl
 
 import CubiumDownloadHandler
 import com.cinemamod.mcef.MCEF
+import com.cinemamod.mcef.MCEFBrowser
 import com.mojang.blaze3d.systems.RenderSystem
 import me.henritom.cubium.CubiumClient
 import me.henritom.cubium.features.bookmark.Bookmark
@@ -17,12 +18,19 @@ import net.minecraft.client.gui.widget.TextFieldWidget
 import net.minecraft.client.render.*
 import net.minecraft.text.Text
 import org.cef.CefApp
+import org.cef.browser.CefBrowser
+import org.cef.browser.CefFrame
 import org.cef.callback.CefCallback
+import org.cef.handler.CefRequestHandlerAdapter
 import org.cef.handler.CefResourceHandler
+import org.cef.handler.CefResourceRequestHandler
+import org.cef.handler.CefResourceRequestHandlerAdapter
+import org.cef.misc.BoolRef
 import org.cef.misc.IntRef
 import org.cef.misc.StringRef
 import org.cef.network.CefRequest
 import org.cef.network.CefResponse
+import java.net.URI
 import java.nio.charset.StandardCharsets
 import java.text.SimpleDateFormat
 import java.util.*
@@ -85,6 +93,7 @@ class BrowserScreen(val parent: Screen?, private val loadUrl: String? = null) : 
             resizeBrowser()
         }
 
+        initWarden(browser!!)
         initSchemeHandler()
     }
 
@@ -546,6 +555,44 @@ class BrowserScreen(val parent: Screen?, private val loadUrl: String? = null) : 
 
             buttonY += buttonHeight + 5
         }
+    }
+
+    private fun initWarden(browser: MCEFBrowser) {
+        browser.client.addRequestHandler(object : CefRequestHandlerAdapter() {
+            override fun getResourceRequestHandler(browser: CefBrowser?, frame: CefFrame?, request: CefRequest?, isNavigation: Boolean, isDownload: Boolean, requestInitiator: String?, disableDefaultHandling: BoolRef?): CefResourceRequestHandler {
+                return object : CefResourceRequestHandlerAdapter() {
+                    override fun onBeforeResourceLoad(browser: CefBrowser?, frame: CefFrame?, request: CefRequest?): Boolean {
+                        if (!CubiumClient.warden.enabled)
+                            return super.onBeforeResourceLoad(browser, frame, request)
+
+                        val rawUrl = request?.url ?: return super.onBeforeResourceLoad(browser, frame, request)
+                        val host = try {
+                            URI(rawUrl).host?.removePrefix("www.") ?: return super.onBeforeResourceLoad(browser, frame, request)
+                        } catch (e: Exception) {
+                            return super.onBeforeResourceLoad(browser, frame, request) // Falls die URL ungültig ist, abbrechen
+                        }
+
+                        if (CubiumClient.warden.blockedDomains.isNotEmpty()) {
+                            val blocked = CubiumClient.warden.blockedDomains.any { domain ->
+                                if (domain.startsWith("*.")) {
+                                    val domainWithoutWildcard = domain.removePrefix("*.")
+                                    host.endsWith(domainWithoutWildcard)
+                                } else {
+                                    host == domain
+                                }
+                            }
+
+                            if (blocked) {
+                                println("[Cubium Warden] Blocked request to $host")
+                                return true
+                            }
+                        }
+
+                        return super.onBeforeResourceLoad(browser, frame, request)
+                    }
+                }
+            }
+        })
     }
 
     private fun initSchemeHandler() {

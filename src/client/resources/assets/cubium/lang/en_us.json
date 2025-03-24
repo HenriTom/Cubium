@@ -58,6 +58,12 @@
 
   "cubium.ui.browser.pop_out": "Pop-Out",
 
+  "cubium.warden.info": "§8» §7Cubium Warden v%s§7 is %s.",
+  "cubium.warden.info.enabled": "§aenabled",
+  "cubium.warden.info.disabled": "§cdisabled",
+
+  "cubium.warden.toggled": "§8» §7Cubium Warden has been %s§7.",
+
   "cubium.default_se.none.title": "None",
 
   "cubium.default_se.google.title": "Google",
