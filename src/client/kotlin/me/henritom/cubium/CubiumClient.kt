@@ -33,6 +33,8 @@ object CubiumClient : ClientModInitializer {
 		ClientTickEvents.END_CLIENT_TICK.register { client ->
 			if (!loaded) {
 				if (client.isRunning) {
+					warden.loadDefaults()
+
 					configManager.checkForSearchEngines()
 
 					configManager.loadSearchEngines()
@@ -42,8 +44,6 @@ object CubiumClient : ClientModInitializer {
 
 					configManager.loadHistory()
 					configManager.loadBookmarks()
-
-					warden.loadDefaults()
 
 					loaded = true
 

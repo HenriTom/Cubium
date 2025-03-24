@@ -117,7 +117,8 @@ class ConfigManager {
 
         val data = mapOf(
             "default_se" to CubiumClient.searchEngineManager.defaultSearchEngine?.title,
-            "user_agent" to CubiumClient.userAgentManager.userAgent
+            "user_agent" to CubiumClient.userAgentManager.userAgent,
+            "warden" to CubiumClient.warden.enabled
         )
 
         configFile.writeText(gson.toJson(data))
@@ -132,6 +133,7 @@ class ConfigManager {
         val data = Gson().fromJson(configFile.readText(), Map::class.java) as Map<*, *>
         CubiumClient.searchEngineManager.defaultSearchEngine = CubiumClient.searchEngineManager.getSearchEngineByTitle(data["default_se"] as? String ?: "")
         CubiumClient.userAgentManager.updateUserAgent(data["user_agent"] as? String ?: "")
+        CubiumClient.warden.enabled = data["warden"] as? Boolean ?: true
     }
 
     fun saveHistory() {
