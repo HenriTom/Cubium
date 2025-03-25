@@ -8,6 +8,7 @@ import kotlinx.serialization.json.Json
 import me.henritom.cubium.CubiumClient
 import me.henritom.cubium.features.uas.UserAgent
 import me.henritom.cubium.search.SearchEngine
+import me.henritom.cubium.ui.impl.BrowserScreen
 import net.fabricmc.loader.api.FabricLoader
 import net.minecraft.client.MinecraftClient
 import net.minecraft.util.Identifier
@@ -118,7 +119,8 @@ class ConfigManager {
         val data = mapOf(
             "default_se" to CubiumClient.searchEngineManager.defaultSearchEngine?.title,
             "user_agent" to CubiumClient.userAgentManager.userAgent,
-            "warden" to CubiumClient.warden.enabled
+            "warden" to CubiumClient.warden.enabled,
+            "zoom" to CubiumClient.zoom
         )
 
         configFile.writeText(gson.toJson(data))
@@ -134,6 +136,7 @@ class ConfigManager {
         CubiumClient.searchEngineManager.defaultSearchEngine = CubiumClient.searchEngineManager.getSearchEngineByTitle(data["default_se"] as? String ?: "")
         CubiumClient.userAgentManager.updateUserAgent(data["user_agent"] as? String ?: "")
         CubiumClient.warden.enabled = data["warden"] as? Boolean ?: true
+        CubiumClient.zoom = (data["zoom"] as? Double ?: 0).toInt()
     }
 
     fun saveHistory() {

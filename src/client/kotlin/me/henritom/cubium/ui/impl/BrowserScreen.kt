@@ -46,6 +46,7 @@ class BrowserScreen(val parent: Screen?, private val loadUrl: String? = null) : 
     private var defaultBrowserOffset = 40f
     private var browserOffset = defaultBrowserOffset
     private var menuOpened = false
+    private var zoomPercentage = 100
 
     private var lastButton: ButtonWidget? = null
     private var reloadButton: ButtonWidget? = null
@@ -101,11 +102,24 @@ class BrowserScreen(val parent: Screen?, private val loadUrl: String? = null) : 
         if (context == null || client == null)
             return
 
+        // Zoom
+        if (browser != null) {
+            browser!!.zoomLevel = CubiumClient.zoom.toDouble() / 10
+
+            val zoomMultiplier = browser?.zoomLevel?.times(1.25) ?: 1.0
+            zoomPercentage = (100.0.times(if (zoomMultiplier > 0) (zoomMultiplier + 1.0) else if (zoomMultiplier < 0) 0.1 * (10 + zoomMultiplier) else 1.0)).toInt()
+
+            if (browserOffset == defaultBrowserOffset)
+                context.drawText(textRenderer, "$zoomPercentage%", browserOffset.toInt() + 4, (height - browserOffset).toInt() + 4, UIColors.WHITE.rgb, true)
+        }
+
+        // Main Screen
         if (CubiumClient.searchEngineManager.defaultSearchEngine == null) {
             client!!.setScreen(SelectSEScreen(null, true))
             return
         }
 
+        // Title
         if (browserOffset == defaultBrowserOffset)
             context.drawText(textRenderer, Text.translatable("cubium.ui.browser.title"), (width - textRenderer.getWidth(Text.translatable("cubium.ui.browser.title"))) / 2, 6, UIColors.WHITE.rgb, true)
 
@@ -471,8 +485,15 @@ class BrowserScreen(val parent: Screen?, private val loadUrl: String? = null) : 
     }
 
     override fun mouseScrolled(mouseX: Double, mouseY: Double, delta: Double, verticalAmount: Double): Boolean {
-        if (addressBar == null || !addressBar!!.isFocused)
+        if (addressBar == null || !addressBar!!.isFocused) {
+            if (hasControlDown()) {
+                CubiumClient.zoom += verticalAmount.toInt() * 8
+                CubiumClient.zoom = Math.clamp(CubiumClient.zoom.toLong(), -72, 72)
+                return super.mouseScrolled(mouseX, mouseY, delta, verticalAmount)
+            }
+
             browser!!.sendMouseWheel(mouseX(mouseX), mouseY(mouseY), verticalAmount, 0)
+        }
 
         return super.mouseScrolled(mouseX, mouseY, delta, verticalAmount)
     }

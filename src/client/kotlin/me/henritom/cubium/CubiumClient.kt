@@ -18,6 +18,7 @@ object CubiumClient : ClientModInitializer {
 	private var loaded = false
 
 	val warden = Warden()
+	var zoom = 0
 
 	private val keyBindManager = KeyBindManager()
 	val configManager = ConfigManager()
