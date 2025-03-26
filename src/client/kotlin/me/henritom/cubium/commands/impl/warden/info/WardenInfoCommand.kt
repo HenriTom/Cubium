@@ -13,7 +13,7 @@ object WardenInfoCommand {
     fun register(): LiteralArgumentBuilder<FabricClientCommandSource>? {
         return ClientCommandManager.literal("info")
             .executes {
-                MessageUtil.printTranslatable("cubium.warden.info", CubiumClient.warden.version, Text.translatable("cubium.warden.info.${if (CubiumClient.warden.enabled) "enabled" else "disabled"}").string)
+                MessageUtil.printTranslatable("cubium.warden.info", CubiumClient.warden.version, Text.translatable("cubium.warden.info.${if (CubiumClient.featureManager.features["warden"] == true) "enabled" else "disabled"}").string)
 
                 Command.SINGLE_SUCCESS
             }

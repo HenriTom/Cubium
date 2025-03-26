@@ -87,7 +87,7 @@ class BrowserScreen(val parent: Screen?, private val loadUrl: String? = null) : 
 
         if (browser == null) {
             val defaultUrl = Text.translatable(CubiumClient.searchEngineManager.defaultSearchEngine!!.url).string
-            browser = MCEF.createBrowser(loadUrl ?: CubiumClient.historyManager.history.lastOrNull()?.url?.ifEmpty { defaultUrl } ?: defaultUrl, false)
+            browser = MCEF.createBrowser(loadUrl ?: if (CubiumClient.featureManager.features["history"] == true) CubiumClient.historyManager.history.lastOrNull()?.url?.ifEmpty { defaultUrl } ?: defaultUrl else defaultUrl, false)
 
             browser!!.client.addDownloadHandler(CubiumDownloadHandler())
 
@@ -137,7 +137,7 @@ class BrowserScreen(val parent: Screen?, private val loadUrl: String? = null) : 
 
             addDrawableChild(lastButton)
         } else
-            lastButton!!.active = (CubiumClient.historyManager.lastUrl != browser?.getURL() && CubiumClient.historyManager.lastUrl != "")
+            lastButton!!.active = (CubiumClient.historyManager.lastUrl != browser?.getURL() && CubiumClient.historyManager.lastUrl != "") && CubiumClient.featureManager.features["history"] == true
 
         if (MinecraftClient.getInstance().currentScreen?.focused == lastButton) {
             MinecraftClient.getInstance().currentScreen?.focused = null
@@ -302,7 +302,8 @@ class BrowserScreen(val parent: Screen?, private val loadUrl: String? = null) : 
 
         // History Saver
         if (CubiumClient.historyManager.history.lastOrNull()?.url != browser?.getURL())
-            CubiumClient.historyManager.add(browser?.getURL().toString())
+            if (CubiumClient.featureManager.features["history"] == true)
+                CubiumClient.historyManager.add(browser?.getURL().toString())
 
         // Browser
         super.render(context, mouseX, mouseY, delta)
@@ -387,7 +388,8 @@ class BrowserScreen(val parent: Screen?, private val loadUrl: String? = null) : 
             return
         }
 
-        CubiumClient.historyManager.add(browser?.getURL().toString())
+        if (CubiumClient.featureManager.features["history"] == true)
+            CubiumClient.historyManager.add(browser?.getURL().toString())
 
         super.close()
     }
@@ -583,14 +585,14 @@ class BrowserScreen(val parent: Screen?, private val loadUrl: String? = null) : 
             override fun getResourceRequestHandler(browser: CefBrowser?, frame: CefFrame?, request: CefRequest?, isNavigation: Boolean, isDownload: Boolean, requestInitiator: String?, disableDefaultHandling: BoolRef?): CefResourceRequestHandler {
                 return object : CefResourceRequestHandlerAdapter() {
                     override fun onBeforeResourceLoad(browser: CefBrowser?, frame: CefFrame?, request: CefRequest?): Boolean {
-                        if (!CubiumClient.warden.enabled)
+                        if (CubiumClient.featureManager.features["warden"] == false)
                             return super.onBeforeResourceLoad(browser, frame, request)
 
                         val rawUrl = request?.url ?: return super.onBeforeResourceLoad(browser, frame, request)
                         val host = try {
                             URI(rawUrl).host?.removePrefix("www.") ?: return super.onBeforeResourceLoad(browser, frame, request)
                         } catch (e: Exception) {
-                            return super.onBeforeResourceLoad(browser, frame, request) // Falls die URL ungültig ist, abbrechen
+                            return super.onBeforeResourceLoad(browser, frame, request)
                         }
 
                         if (CubiumClient.warden.blockedDomains.isNotEmpty()) {

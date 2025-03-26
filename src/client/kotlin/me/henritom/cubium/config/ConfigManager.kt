@@ -4,11 +4,11 @@ import BookmarkListContainer
 import HistoryListContainer
 import com.google.gson.Gson
 import com.google.gson.GsonBuilder
+import com.google.gson.JsonElement
 import kotlinx.serialization.json.Json
 import me.henritom.cubium.CubiumClient
 import me.henritom.cubium.features.uas.UserAgent
 import me.henritom.cubium.search.SearchEngine
-import me.henritom.cubium.ui.impl.BrowserScreen
 import net.fabricmc.loader.api.FabricLoader
 import net.minecraft.client.MinecraftClient
 import net.minecraft.util.Identifier
@@ -116,11 +116,14 @@ class ConfigManager {
         if (!configFile.exists())
             configFile.createNewFile()
 
-        val data = mapOf(
-            "default_se" to CubiumClient.searchEngineManager.defaultSearchEngine?.title,
-            "user_agent" to CubiumClient.userAgentManager.userAgent,
-            "warden" to CubiumClient.warden.enabled,
-            "zoom" to CubiumClient.zoom
+        val data = listOf(
+            mapOf(
+                "default_se" to CubiumClient.searchEngineManager.defaultSearchEngine?.title,
+                "user_agent" to CubiumClient.userAgentManager.userAgent,
+                "zoom" to CubiumClient.zoom
+            ),
+
+            CubiumClient.featureManager.features.keys.associateWith { CubiumClient.featureManager.features[it] as Boolean }
         )
 
         configFile.writeText(gson.toJson(data))
@@ -132,11 +135,35 @@ class ConfigManager {
         if (!configFile.exists() || configFile.isDirectory)
             return
 
-        val data = Gson().fromJson(configFile.readText(), Map::class.java) as Map<*, *>
-        CubiumClient.searchEngineManager.defaultSearchEngine = CubiumClient.searchEngineManager.getSearchEngineByTitle(data["default_se"] as? String ?: "")
-        CubiumClient.userAgentManager.updateUserAgent(data["user_agent"] as? String ?: "")
-        CubiumClient.warden.enabled = data["warden"] as? Boolean ?: true
-        CubiumClient.zoom = (data["zoom"] as? Double ?: 0).toInt()
+        val gson = Gson()
+        val jsonElement = gson.fromJson(configFile.readText(), JsonElement::class.java)
+
+        if (jsonElement.isJsonObject) {
+            // Load old config
+
+            val oldConfig = jsonElement.asJsonObject
+            val generalConfig = mapOf(
+                "default_se" to oldConfig.get("default_se")?.asString,
+                "user_agent" to oldConfig.get("user_agent")?.asString,
+                "warden" to oldConfig.get("warden")?.asBoolean,
+                "zoom" to oldConfig.get("zoom")?.asDouble
+            )
+
+            CubiumClient.searchEngineManager.defaultSearchEngine = CubiumClient.searchEngineManager.getSearchEngineByTitle(generalConfig["default_se"] as? String ?: "")
+            CubiumClient.userAgentManager.updateUserAgent((generalConfig["user_agent"] ?: "").toString())
+            CubiumClient.zoom = (generalConfig["zoom"] as Double? ?: 0.0).toInt()
+            CubiumClient.featureManager.features["warden"] = generalConfig["warden"] as Boolean
+        } else if (jsonElement.isJsonArray) {
+            val data = gson.fromJson(jsonElement, List::class.java) as List<Map<String, *>>
+            val generalConfig = data[0]
+            val featureConfig = data[1] as Map<String, Boolean>
+
+            CubiumClient.searchEngineManager.defaultSearchEngine = CubiumClient.searchEngineManager.getSearchEngineByTitle(generalConfig["default_se"] as? String ?: "")
+            CubiumClient.userAgentManager.updateUserAgent((generalConfig["user_agent"] ?: "").toString())
+            CubiumClient.zoom = (generalConfig["zoom"] as Double? ?: 0.0).toInt()
+
+            CubiumClient.featureManager.features.putAll(featureConfig)
+        }
     }
 
     fun saveHistory() {

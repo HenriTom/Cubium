@@ -58,6 +58,13 @@
 
   "cubium.ui.browser.pop_out": "Pop-Out",
 
+  "cubium.features.list": "§8» §7Features(§f%s§7):",
+  "cubium.features.list.it": "§8» %s",
+  "cubium.features.toggled": "§8» §7Feature §f%s§7 has been %s§7.",
+  "cubium.features.toggled.enabled": "enabled",
+  "cubium.features.toggled.disabled": "disabled",
+  "cubium.features.not_found": "§8» §7Feature §f%s§7 not found.",
+
   "cubium.warden.info": "§8» §7Cubium Warden v%s§7 is %s.",
   "cubium.warden.info.enabled": "§aenabled",
   "cubium.warden.info.disabled": "§cdisabled",

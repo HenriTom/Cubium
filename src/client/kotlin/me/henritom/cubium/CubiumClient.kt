@@ -2,6 +2,7 @@ package me.henritom.cubium
 
 import me.henritom.cubium.commands.CubiumCommand
 import me.henritom.cubium.config.ConfigManager
+import me.henritom.cubium.features.FeatureManager
 import me.henritom.cubium.features.warden.Warden
 import me.henritom.cubium.features.bookmark.BookmarkManager
 import me.henritom.cubium.features.history.HistoryManager
@@ -21,6 +22,7 @@ object CubiumClient : ClientModInitializer {
 	var zoom = 0
 
 	private val keyBindManager = KeyBindManager()
+	val featureManager = FeatureManager()
 	val configManager = ConfigManager()
 	val searchEngineManager = SearchEngineManager()
 	val userAgentManager = UserAgentManager()

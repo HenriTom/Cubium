@@ -6,7 +6,6 @@ import java.net.URI
 class Warden {
 
     val version = "1.0.0"
-    var enabled = true
 
     val blockedDomains = mutableSetOf<String>()
 
