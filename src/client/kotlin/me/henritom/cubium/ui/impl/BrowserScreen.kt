@@ -305,6 +305,21 @@ class BrowserScreen(val parent: Screen?, private val loadUrl: String? = null) : 
             if (CubiumClient.featureManager.features["history"] == true)
                 CubiumClient.historyManager.add(browser?.getURL().toString())
 
+        if (CubiumClient.featureManager.features["darkreader"] == true)
+            browser!!.executeJavaScript(
+                """
+                    (function() {
+                        let script = document.createElement('script');
+                        script.src = 'https://cdn.jsdelivr.net/npm/darkreader@4.9.58/darkreader.min.js';
+                        script.onload = () => DarkReader.enable();
+                        document.head.appendChild(script);
+                    })();
+                """,
+                "https://darkreader.org",
+                1
+            )
+
+
         // Browser
         super.render(context, mouseX, mouseY, delta)
 

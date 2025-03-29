@@ -7,6 +7,7 @@ class FeatureManager {
     init {
         features["history"] = true
         features["warden"] = true
+        features["darkreader"] = true
     }
 
     fun toggleFeature(key: String) {
