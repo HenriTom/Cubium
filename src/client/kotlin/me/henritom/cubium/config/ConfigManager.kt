@@ -152,7 +152,6 @@ class ConfigManager {
             CubiumClient.searchEngineManager.defaultSearchEngine = CubiumClient.searchEngineManager.getSearchEngineByTitle(generalConfig["default_se"] as? String ?: "")
             CubiumClient.userAgentManager.updateUserAgent((generalConfig["user_agent"] ?: "").toString())
             CubiumClient.zoom = (generalConfig["zoom"] as Double? ?: 0.0).toInt()
-            CubiumClient.featureManager.features["warden"] = generalConfig["warden"] as Boolean
         } else if (jsonElement.isJsonArray) {
             val data = gson.fromJson(jsonElement, List::class.java) as List<Map<String, *>>
             val generalConfig = data[0]
