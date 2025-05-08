@@ -8,6 +8,7 @@ import com.google.gson.JsonElement
 import kotlinx.serialization.json.Json
 import me.henritom.cubium.CubiumClient
 import me.henritom.cubium.features.uas.UserAgent
+import me.henritom.cubium.overlay.BrowserOverlay
 import me.henritom.cubium.search.SearchEngine
 import net.fabricmc.loader.api.FabricLoader
 import net.minecraft.client.MinecraftClient
@@ -120,7 +121,9 @@ class ConfigManager {
             mapOf(
                 "default_se" to CubiumClient.searchEngineManager.defaultSearchEngine?.title,
                 "user_agent" to CubiumClient.userAgentManager.userAgent,
-                "zoom" to CubiumClient.zoom
+                "zoom" to CubiumClient.zoom,
+                "overlay_size_x" to BrowserOverlay.overlaySizeX,
+                "overlay_size_y" to BrowserOverlay.overlaySizeY
             ),
 
             CubiumClient.featureManager.features.keys.associateWith { CubiumClient.featureManager.features[it] as Boolean }
@@ -160,6 +163,8 @@ class ConfigManager {
             CubiumClient.searchEngineManager.defaultSearchEngine = CubiumClient.searchEngineManager.getSearchEngineByTitle(generalConfig["default_se"] as? String ?: "")
             CubiumClient.userAgentManager.updateUserAgent((generalConfig["user_agent"] ?: "").toString())
             CubiumClient.zoom = (generalConfig["zoom"] as Double? ?: 0.0).toInt()
+            BrowserOverlay.overlaySizeX = generalConfig["overlay_size_x"] as Double? ?: (10 / (1 * 1.667))
+            BrowserOverlay.overlaySizeY = generalConfig["overlay_size_y"] as Double? ?: (10 / (1 * 1.667))
 
             CubiumClient.featureManager.features.putAll(featureConfig)
         }

@@ -71,6 +71,9 @@
 
   "cubium.warden.toggled": "§8» §7Cubium Warden has been %s§7.",
 
+  "cubium.overlay.set_size": "§8» §7The size of your overlay has been set to (§f%s§7/§f%s§7).",
+  "cubium.default_se.reset": "§8» §7Your search engine has been reset.",
+
   "cubium.default_se.none.title": "None",
 
   "cubium.default_se.google.title": "Google",

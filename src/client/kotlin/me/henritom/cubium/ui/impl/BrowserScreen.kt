@@ -379,6 +379,9 @@ class BrowserScreen(val parent: Screen?, private val loadUrl: String? = null) : 
         menuButton?.active = visible
         menuButton?.visible = visible
 
+        minimizeButton?.active = visible
+        minimizeButton?.visible = visible
+
         fullscreenButton?.active = visible
         fullscreenButton?.visible = visible
 

@@ -19,6 +19,8 @@ class BrowserOverlay : HudRenderCallback {
     private var posY = 20F
 
     companion object {
+        var overlaySizeX = 10 / (1 * 1.667)
+        var overlaySizeY = 10 / (1 * 1.667)
         var enabled = false
 
         fun scroll(amount: Int) {
@@ -36,9 +38,9 @@ class BrowserOverlay : HudRenderCallback {
             val mouseX = client.mouse.x / client.window.scaleFactor
             val mouseY = client.mouse.y / client.window.scaleFactor
 
-            if (mouseX in posX..(posX + client.window.width / 6) && mouseY in posY..(posY + client.window.height / 6) && dragging) {
-                posX = (mouseX - client.window.width / 12).toFloat()
-                posY = (mouseY - client.window.height / 12).toFloat()
+            if (mouseX in posX..((posX + client.window.width / overlaySizeX).toFloat()) && mouseY in posY..((posY + client.window.height / overlaySizeY).toFloat()) && dragging) {
+                posX = (mouseX - client.window.width / (overlaySizeX * 2)).toFloat()
+                posY = (mouseY - client.window.height / (overlaySizeY * 2)).toFloat()
             }
         }
     }
@@ -47,8 +49,8 @@ class BrowserOverlay : HudRenderCallback {
         if (browser == null || !enabled)
             return
 
-        val width = posX + client.window.width / 6
-        val height = posY + client.window.height / 6
+        val width = posX + client.window.width / overlaySizeX
+        val height = posY + client.window.height / overlaySizeY
 
         RenderSystem.disableDepthTest()
         RenderSystem.setShader(ShaderProgramKeys.POSITION_TEX_COLOR)
@@ -57,9 +59,9 @@ class BrowserOverlay : HudRenderCallback {
         val tessellator = Tessellator.getInstance()
         val buffer: BufferBuilder = tessellator.begin(VertexFormat.DrawMode.QUADS, VertexFormats.POSITION_TEXTURE_COLOR)
 
-        buffer.vertex(posX, height, 0f).texture(0.0f, 1.0f).color(255, 255, 255, 255)
-        buffer.vertex(width, height, 0f).texture(1.0f, 1.0f).color(255, 255, 255, 255)
-        buffer.vertex(width, posY, 0f).texture(1.0f, 0.0f).color(255, 255, 255, 255)
+        buffer.vertex(posX, height.toFloat(), 0f).texture(0.0f, 1.0f).color(255, 255, 255, 255)
+        buffer.vertex(width.toFloat(), height.toFloat(), 0f).texture(1.0f, 1.0f).color(255, 255, 255, 255)
+        buffer.vertex(width.toFloat(), posY, 0f).texture(1.0f, 0.0f).color(255, 255, 255, 255)
         buffer.vertex(posX, posY, 0f).texture(0.0f, 0.0f).color(255, 255, 255, 255)
 
         BufferRenderer.drawWithGlobalProgram(buffer.end())
