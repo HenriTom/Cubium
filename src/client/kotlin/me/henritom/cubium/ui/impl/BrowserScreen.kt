@@ -10,7 +10,6 @@ import me.henritom.cubium.features.minimize.BrowserSaver.Companion.browser
 import me.henritom.cubium.overlay.BrowserOverlay
 import me.henritom.cubium.ui.UIColors
 import net.minecraft.client.MinecraftClient
-import net.minecraft.client.gl.ShaderProgramKeys
 import net.minecraft.client.gui.DrawContext
 import net.minecraft.client.gui.screen.Screen
 import net.minecraft.client.gui.widget.ButtonWidget
@@ -324,7 +323,7 @@ class BrowserScreen(val parent: Screen?, private val loadUrl: String? = null) : 
         super.render(context, mouseX, mouseY, delta)
 
         RenderSystem.disableDepthTest()
-        RenderSystem.setShader(ShaderProgramKeys.POSITION_TEX_COLOR)
+        RenderSystem.setShader(GameRenderer::getPositionTexColorProgram)
         RenderSystem.setShaderTexture(0, browser!!.renderer.textureID)
 
         val tessellator = Tessellator.getInstance()

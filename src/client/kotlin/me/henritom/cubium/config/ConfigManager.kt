@@ -5,6 +5,7 @@ import HistoryListContainer
 import com.google.gson.Gson
 import com.google.gson.GsonBuilder
 import com.google.gson.JsonElement
+import kotlinx.serialization.encodeToString
 import kotlinx.serialization.json.Json
 import me.henritom.cubium.CubiumClient
 import me.henritom.cubium.features.uas.UserAgent

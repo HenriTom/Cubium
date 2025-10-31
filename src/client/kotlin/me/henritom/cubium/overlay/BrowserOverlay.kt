@@ -5,7 +5,6 @@ import me.henritom.cubium.features.minimize.BrowserSaver.Companion.browser
 import net.fabricmc.fabric.api.client.event.lifecycle.v1.ClientTickEvents
 import net.fabricmc.fabric.api.client.rendering.v1.HudRenderCallback
 import net.minecraft.client.MinecraftClient
-import net.minecraft.client.gl.ShaderProgramKeys
 import net.minecraft.client.gui.DrawContext
 import net.minecraft.client.gui.screen.ChatScreen
 import net.minecraft.client.render.*
@@ -53,7 +52,7 @@ class BrowserOverlay : HudRenderCallback {
         val height = posY + client.window.height / overlaySizeY
 
         RenderSystem.disableDepthTest()
-        RenderSystem.setShader(ShaderProgramKeys.POSITION_TEX_COLOR)
+        RenderSystem.setShader(GameRenderer::getPositionTexColorProgram)
         RenderSystem.setShaderTexture(0, browser!!.renderer.textureID)
 
         val tessellator = Tessellator.getInstance()

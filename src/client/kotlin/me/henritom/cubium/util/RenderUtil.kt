@@ -37,7 +37,7 @@ class RenderUtil {
 
         fun drawIcon(drawContext: DrawContext, iconName: String, x: Int, y: Int, width: Int, height: Int) {
             val icon = Identifier.of("cubium", "icons/" + iconName.lowercase(Locale.getDefault()))
-            drawContext.drawTexture(RenderLayer::getGuiTextured, icon, x, y, 0F, 0F, width, height, width, height)
+            drawContext.drawTexture(icon, x, y, 0f, 0f, width, height, width, height)
         }
     }
 }
